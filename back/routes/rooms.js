@@ -4,6 +4,7 @@ const router = express.Router()
 const Room = require('../model/room.js');
 const Messages = require('../model/messages.js');
 const Senders = require('../model/user.js');
+const User = require('../model/user.js');
 
 module.exports = router;
 
@@ -42,41 +43,80 @@ router.get('/all', async (req, res) => {
     }
 });
 
-router.get('/allmessages/:roomName', async(req,res) => {
-    try{
-        // const roomName = req.params.roomName;
-        const roomName = req.session.room;
-        const all_messages = await Messages.find({room: roomName});
+// router.get('/allmessages/:roomName', async(req,res) => {
+//     try{
+//         // const roomName = req.params.roomName;
+//         const roomName = req.session.room;
+//         const all_messages = await Messages.find({room: roomName});
 
-        // var all_messages_array = all_messages;
-        var room_name_sender_name_arr = new Array();
+//         // var all_messages_array = all_messages;
+//         var room_name_sender_name_arr = new Array();
 
-        for(const message of all_messages) {
-            const roomID = message.room;
-            const room = await Room.findById(roomID);
-            const room_name = room.name;
+//         for(const message of all_messages) {
+//             const roomID = message.room;
+//             const room = await Room.findById(roomID);
+//             const room_name = room.name;
 
-            const senderID = message.sender;
-            const sender = await Senders.findById(senderID);
-            const sender_name = sender.name;
+//             const senderID = message.sender;
+//             const sender = await Senders.findById(senderID);
+//             const sender_name = sender.name;
 
-            const room_name_sender_name = {
-                message: message.message,
-                roomName: room_name,
-                username: sender_name,
-            }
+//             const room_name_sender_name = {
+//                 message: message.message,
+//                 roomName: room_name,
+//                 username: sender_name,
+//             }
 
-            room_name_sender_name_arr.push(room_name_sender_name);
-        }
+//             room_name_sender_name_arr.push(room_name_sender_name);
+//         }
 
-        res.send(room_name_sender_name_arr);
-        //res.send(all_messages);
+//         res.send(room_name_sender_name_arr);
+//         //res.send(all_messages);
+//     }
+
+//     catch(error){
+//         console.error("In room.js, ", error);
+//         res.status(500).send("Invalid query");
+//     }
+// });
+
+router.get('/allmessages/:roomName', async (req, res) => {
+  try {
+    const roomName = req.session.room;
+    console.log(roomName)
+    const room = await Room.findOne({ name: roomName });
+
+    if (!room) {
+      return res.status(404).send("Room not found");
     }
 
-    catch(error){
-        console.error("In room.js, ", error);
-        res.status(500).send("Invalid query");
-    }
+    const allMessages = await Messages.find({ room: room._id })
+      .populate('sender', 'name') 
+      .populate({
+        path: 'room',
+        select: 'name',
+      }); 
+
+    const roomNameSenderNameArr = allMessages.map((message) => {
+      const roomName = message.room.name;
+      const senderName = message.sender.name;
+
+      console.log('Message:', message.message.text);
+      console.log('Room:', roomName);
+      console.log('Sender Name:', senderName);
+
+      return {
+        message: message.message.text,
+        roomName,
+        username: senderName,
+      };
+    });
+
+    res.send(roomNameSenderNameArr);
+  } catch (error) {
+    console.error("Error in /allmessages/:roomName endpoint:", error);
+    res.status(500).send("Invalid query");
+  }
 });
 
 // router.post('/newmessage', async (req, res) => {
@@ -98,11 +138,16 @@ router.get('/allmessages/:roomName', async(req,res) => {
 router.post('/newmessage', async (req, res) => {
     try {
       const { text } = req.body;
+
       
     //   res.send({ text })
       const roomName = req.session.room; // Retrieve the room name from the session data
-      console.log(roomName)
+      // console.log(roomName)
+      if (!req.session.room) {
+        return res.status(400).send("Room name not found in the session");
+      }
       const username = req.session.username; 
+      // console.log(username)
     //   res.json(roomName)
     //   console.log(req.session.room)
     
@@ -120,12 +165,19 @@ router.post('/newmessage', async (req, res) => {
         return res.status(404).send("User not found");
       }
   
-      const newMessage = new Message({
+      const newMessage = new Messages({
         message: { text },
         sender: user._id, // Use the retrieved user ID
         room: roomC._id, // Use the retrieved room ID
       });
       await newMessage.save();
+      // const io = req.app.get('io');
+
+      req.app.get('io').to(roomName).emit('newMessage', {
+        message: text,
+        senderId: user._id,
+      });
+  
   
       return res.status(201).send('Message saved successfully');
     } 
@@ -184,8 +236,10 @@ router.post('/join', (req, res) => {
     //   const { session } = req;
     //   const { roomName } = req.body;
     // console.log(req.body)
-      const username = req.session.username;
-      const {room} = req.body;
+    const username = req.session.username;
+    const {room} = req.body;
+    const roomName = room || req.session.room;
+
     //   session.room = room;
     //   session.username = username;
       

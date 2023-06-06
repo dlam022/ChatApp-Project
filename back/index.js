@@ -14,7 +14,7 @@ const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
 const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
 
-
+const Messages = require('./model/messages.js');
 
 // TODO: add cors to allow cross origin requests
 //cors allows us to access server from a different address
@@ -114,34 +114,88 @@ io.use((socket, next)=> {
   }
 });
 
-io.on('connection', (socket)=>{
-  console.log("user connected")
-  // TODO: write codes for the messaging functionality
-  // TODO: your code here
+// io.on('connection', (socket)=>{
+//   console.log("user connected")
+//   // TODO: write codes for the messaging functionality
+//   // TODO: your code here
+//   const username = socket.request.session.username;
+//   const name = socket.request.session.name;
+//   // room = undefined
+//   const room = socket.request.session.room
+//   console.log("user Connected");
+//   socket.on("disconnect", () => {
+//     console.log("user Disconnected");
+//   })
+
+//   socket.on("chat message", (data)=> {
+//     console.log("got the message", data)
+//     io.to(room).emit("chat message", data)
+//   })
+//   socket.on("join", (data) => {
+//     console.log("JOINED ROOM")
+//     socket.join(data.room);
+//     let room = data.room;
+//     let username = data.username;
+//     let name = data.name
+//     socket.request.session.room = data.room;
+//     console.log(`user has joined the room ${data.room}`);
+//   })
+
+//   socket.emit("starting data", {"text":"hi"})
+//   //write the different types of callbacks
+//     //user sends a message, add message to user, change rooms
+//       //in old code but needs to add that the first time user goes to the room, 
+//       //load previous messages of the room using the data base
+// })
+
+io.on('connection', (socket) => {
+  console.log("user connected");
+
+  // Retrieve user information from session
   const username = socket.request.session.username;
   const name = socket.request.session.name;
-  room = socket.request.session.room;
-  console.log("user Connected");
+
+  socket.on("join", (data) => {
+    const { room } = data;
+
+    socket.join(room);
+    socket.request.session.room = room;
+    socket.request.session.save();
+
+    console.log(`User joined room: ${room}`);
+  });
+
   socket.on("disconnect", () => {
     console.log("user Disconnected");
-  })
+  });
 
-  socket.on("chat message", (data)=> {
-    console.log("got the message", data)
-    io.to(room).emit("chat message", data)
-  })
-  socket.on("join", (data) => {
-    console.log("JOINED ROOM")
-    socket.join(data.room);
-    let room = data.room;
-    let username = data.username;
-    let name = data.name
-    console.log(`user has joined the room ${data.room}`);
-  })
+  socket.on("message", (data) => {
+    console.log("got the message", data);
+    const room = socket.request.session.room;
+    io.to(room).emit("message", data);
+  });
+  socket.on('newMessage', async (data) => {
+    try {
+      const { text, senderId, room } = data;
 
-  socket.emit("starting data", {"text":"hi"})
-  //write the different types of callbacks
-    //user sends a message, add message to user, change rooms
-      //in old code but needs to add that the first time user goes to the room, 
-      //load previous messages of the room using the data base
-})
+      // Save the new message to the database
+      const newMessage = new Messages({
+        message: { text },
+        sender: senderId,
+        room: room,
+      });
+      await newMessage.save();
+
+      // Emit the new message to all connected clients in the room
+      io.to(room).emit('message', {
+        message: text,
+        senderId,
+      });
+    } catch (error) {
+      console.error('Error creating or saving message:', error);
+    }
+  });
+
+  socket.emit("starting data", { "text": "hi" });
+});
+app.set('io', io);

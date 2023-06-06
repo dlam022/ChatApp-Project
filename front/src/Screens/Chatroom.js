@@ -33,25 +33,61 @@ class Chatroom extends react.Component{
         }
       }
       
+      fetchMessages = async () => {
+        try {
+          const response = await fetch(
+            this.props.server_url + '/api/rooms/allmessages/' + this.props.roomName,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+    
+          if (response.ok) {
+            const data = await response.json();
+            const { roomName } = await response.json();
+            this.setState({ messages: data });
+            console.log('Fetched messages:', data);
+          } else {
+            console.error('Failed to fetch messages:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching messages:', error);
+        }
+      };
 
-    componentDidMount() {
+      async componentDidMount() {
         console.log("chat room");
-        fetch(this.props.server_url + '/api/rooms/allmessages/' + this.props.roomName,  {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-
-        .then((res) => {
-            res.json().then((data) => {
-                this.setState({messages:data});
-                console.log("Fetched messages:", data);
-            })
+        this.fetchMessages();
+        try {
+          // Fetch the room name from the server
+          const response = await fetch(this.props.server_url + '/api/rooms/join', {
+            method: 'POST',
+            credentials: 'include',
+          });
+          if (response.ok) {
+            const { roomName } = await response.json();
+            this.setState({ roomName });
+            console.log(response)
+          } else {
+            console.error('Failed to join room:', response.status);
+          }
+        } catch (error) {
+          console.error('Error joining room:', error);
+        }
+      
+        this.socket.on('message', (message) => {
+          // if (message.sender !== this.state.username) {
+            console.log('New message:', message);
+          // }
+          this.setState((prevState) => ({
+            messages: [...prevState.messages, message],
+          }));
         });
-
-    }
+      }
 
     handleChange = (event) => {
         this.setState({text:event.target.value});
