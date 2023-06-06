@@ -26,7 +26,7 @@ class ScreenHandler extends react.Component{
             }
         }).then((res) => {
             res.json().then((data) => {
-                if (data.message == "logged in"){
+                if (data.message === "logged in"){
                     this.setState({screen: "lobby"});
                 }
                 else{
@@ -42,13 +42,13 @@ class ScreenHandler extends react.Component{
 
     render(){
         let display = "loading...";
-        if (this.state.screen == "auth"){
+        if (this.state.screen === "auth"){
             display = <Auth server_url = {server_url} changeScreen={this.changeScreen}/>;
         }
-        else if (this.state.screen == "lobby"){
+        else if (this.state.screen === "lobby"){
             display = <Lobby server_url = {server_url}/>;
         }
-        else if (this.state.screen == "chatroom"){
+        else if (this.state.screen === "chatroom"){
             display = <Chatroom server_url = {server_url}/>;
         }
         return(

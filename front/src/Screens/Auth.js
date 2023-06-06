@@ -2,6 +2,19 @@ import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
 
+String.prototype.hashCode = function() {
+    var hash = 0,
+      i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+      chr = this.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
+  }
+
+
 class Auth extends react.Component{
     constructor(props){
         super(props);
@@ -16,42 +29,51 @@ class Auth extends react.Component{
     }
 
     login = (data) => {
-        // TODO: write codes to login
-        //connect to server, pass information that user has entered to server
-            //perform actions depending on what user enteres
         console.log(data);
+        const { username, password } = data;
+        const hashedData = {username: username, password: password.hashCode()}
+        fetch('http://localhost:3001/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(hashedData),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            // do login stuff thnx
+            console.log("logged in");
+            if(result.status) {
+                console.log("works");
+                this.props.changeScreen("lobby");
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      };
 
-        fetch(this.props.server_url + '/api/auth/login', {
-            method: "POST",
-            mode: 'cors',
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': "application/json"
-            },
-
-            body:JSON.stringify(data),
-
-        }).then((res) => {
-            res.json().then((data) => {
-                if (data.msg == "Logged in"){
-                    // this.setState({screen: "lobby"});
-                    this.props.changeScreen("lobby");
-                }
-                else{
-                    alert(data.msg);
-                    //this.setState({screen: "auth"});
-                }
-            });
-        });
-
-        
-    }
 
     register = (data) => {
-        // TODO: write codes to register
-        console.log(data);
-    }
+        console.log(data)
+        const { username, password, name } = data;
+        const hashedData = {username: username, password: password.hashCode(), name: name}
+        fetch('http://localhost:3001/api/auth/register', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(hashedData),
+        })
+            .then((response) => response.json())
+            .then((result) => {
+            console.log(result);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+        }
 
     render(){
         let display = null;
@@ -91,3 +113,51 @@ class Auth extends react.Component{
 }
 
 export default Auth;
+
+// unhashed stuff here
+// login = (data) => {
+//     console.log(data);
+//     const { username, password } = data;
+//     const hashedData = {username: username, password: password.hashCode()}
+//     fetch('http://localhost:3001/api/auth/login', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(data),
+//     })
+//       .then((response) => response.json())
+//       .then((result) => {
+//         console.log(result);
+//         // do login stuff thnx
+//         console.log("logged in");
+//         if(result.status) {
+//             console.log("works");
+//             this.props.changeScreen("lobby");
+//         }
+//       })
+//       .catch((error) => {
+//         console.error('Error:', error);
+//       });
+//   };
+
+
+// register = (data) => {
+//     console.log(data)
+//     const { username, password, name } = data;
+//     const hashedData = {username: username, password: password.hashCode(), name: name}
+//     fetch('http://localhost:3001/api/auth/register', {
+//         method: 'POST',
+//         headers: {
+//         'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data),
+//     })
+//         .then((response) => response.json())
+//         .then((result) => {
+//         console.log(result);
+//         })
+//         .catch((error) => {
+//         console.error('Error:', error);
+//         });
+//     }
