@@ -9,7 +9,7 @@ class Chatroom extends react.Component{
         super(props);
         this.socket = io('http://localhost:3001', {
             cors: {
-                origin: 'http://localhost:3001',
+                origin: ['http://localhost:3001', 'http://localhost:3000'],
                 credentials: true
             },  transports: ['websocket']
         });
@@ -18,7 +18,8 @@ class Chatroom extends react.Component{
             text: '',
             newMessages: '',
             username: props.username, 
-            roomName: props.room ,
+            room: props.room ,
+            userId: undefined,
         }
         this.socket.on('newMessage', (message) => {
             this.setState((prevState) => ({
@@ -60,35 +61,45 @@ class Chatroom extends react.Component{
         }
       };
 
+
       async componentDidMount() {
         console.log("chat room");
         this.fetchMessages();
+        console.log("fetching room currently in");
         try {
-          // Fetch the room name from the server
-          const response = await fetch(this.props.server_url + '/api/rooms/join', {
-            method: 'POST',
+          const response = await fetch(this.props.server_url + '/api/rooms/current', {
+            method: 'GET',
             credentials: 'include',
           });
+      
           if (response.ok) {
-            const { roomName } = await response.json();
-            this.setState({ roomName });
-            console.log(response)
+            const responseData = await response.json();
+            console.log('Response Data:', responseData);
+      
+            if (responseData && responseData.room) {
+              const { room, user } = responseData;
+              this.setState({ room: room, userId: user._id });
+              console.log("Room:", room);
+              console.log("User ID:", user._id);
+            } else {
+              console.error('Room name not found in the response:', responseData);
+            }
           } else {
-            console.error('Failed to join room:', response.status);
+            console.error('Failed to fetch current room:', response.status);
           }
         } catch (error) {
-          console.error('Error joining room:', error);
+          console.error('Error fetching current room:', error);
         }
       
-        this.socket.on('message', (message) => {
-          // if (message.sender !== this.state.username) {
-            console.log('New message:', message);
-          // }
+        this.socket.on('newMessage', (message) => {
+          console.log('New message:', message);
           this.setState((prevState) => ({
             messages: [...prevState.messages, message],
           }));
         });
       }
+      
+
 
     handleChange = (event) => {
         this.setState({text:event.target.value});
@@ -125,6 +136,7 @@ class Chatroom extends react.Component{
     
         const messageData = {
           text,
+          room: this.state.room,
         };
 
         const response = await fetch(this.props.server_url + '/api/rooms/newmessage', {
@@ -144,6 +156,7 @@ class Chatroom extends react.Component{
           this.setState((prevState) => ({
             messages: [...prevState.messages, newMes],
           }));
+          this.socket.emit('newMessage', { message: text, senderId: this.props.userId });
         } else {
           console.error('Failed to send message:', response.status);
         }

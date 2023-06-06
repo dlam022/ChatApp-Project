@@ -170,10 +170,10 @@ router.post('/newmessage', async (req, res) => {
         sender: user._id, // Use the retrieved user ID
         room: roomC._id, // Use the retrieved room ID
       });
-      await newMessage.save();
-      // const io = req.app.get('io');
-
-      req.app.get('io').to(roomName).emit('newMessage', {
+      // await newMessage.save();
+      const io = req.app.get('io');
+      // res.json("emitting new message")
+      io.to(roomName).emit('newMessage', {
         message: text,
         senderId: user._id,
       });
@@ -239,11 +239,33 @@ router.post('/join', (req, res) => {
     const username = req.session.username;
     const {room} = req.body;
     const roomName = room || req.session.room;
+    req.session.room = roomName;
 
     //   session.room = room;
     //   session.username = username;
       
-      res.json({ room, username });
+      res.json({ room: req.session.room, username });
+    } catch (error) {
+      console.error('Error joining room:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  router.get('/current', async (req, res) => {
+    try {
+    //   const { session } = req;
+    //   const { roomName } = req.body;
+    // console.log(req.body)
+    const username = req.session.username;
+    const {room} = req.body;
+    const roomName = room || req.session.room;
+    req.session.room = roomName;
+    const user = await User.findOne({ username: req.session.username });
+
+    //   session.room = room;
+    //   session.username = username;
+      
+      res.json({ room:  req.session.room, user });
     } catch (error) {
       console.error('Error joining room:', error);
       res.status(500).send('Internal Server Error');

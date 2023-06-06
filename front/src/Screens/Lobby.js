@@ -18,6 +18,7 @@ class Lobby extends react.Component{
             screen: "starting",
             name: "",
             username: '',
+            room: '',
         }
     }
     fetchRooms = () => {
@@ -181,7 +182,7 @@ class Lobby extends react.Component{
             this.socket.emit("join", { room: room, username: username });            
             this.setState({
                 username: username,
-                roomName: room,
+                room: room,
               });
             //this.setState({ rooms: room, username: username, screen: "chatroom" });
           this.props.changeScreen("chatroom");

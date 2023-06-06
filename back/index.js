@@ -174,9 +174,11 @@ io.on('connection', (socket) => {
     const room = socket.request.session.room;
     io.to(room).emit("message", data);
   });
+
   socket.on('newMessage', async (data) => {
     try {
-      const { text, senderId, room } = data;
+      const { text, senderId } = data;
+      const room = socket.request.session.room
 
       // Save the new message to the database
       const newMessage = new Messages({
@@ -184,13 +186,19 @@ io.on('connection', (socket) => {
         sender: senderId,
         room: room,
       });
+      console.log("saving to db")
       await newMessage.save();
+
 
       // Emit the new message to all connected clients in the room
       io.to(room).emit('message', {
         message: text,
         senderId,
       });
+      console.log('New message:', text);
+      console.log('Sender ID:', senderId);
+      console.log('Room:', room);
+      console.log('Message emitted to other clients in the same room.');
     } catch (error) {
       console.error('Error creating or saving message:', error);
     }
