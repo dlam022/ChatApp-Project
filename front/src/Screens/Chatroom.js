@@ -1,9 +1,6 @@
 import react from "react";
 import {io} from "socket.io-client";
 
-
-  
-
 class Chatroom extends react.Component{
     constructor(props){
         super(props);
@@ -19,7 +16,7 @@ class Chatroom extends react.Component{
             newMessages: '',
             username: props.username, 
             room: props.room ,
-            userId: undefined,
+            // userId: undefined,
         }
         this.socket.on('newMessage', (message) => {
             this.setState((prevState) => ({
@@ -37,7 +34,7 @@ class Chatroom extends react.Component{
       fetchMessages = async () => {
         try {
           const response = await fetch(
-            this.props.server_url + '/api/rooms/allmessages/' + this.props.roomName,
+            this.props.server_url + '/api/rooms/allmessages/' + this.state.roomName,
             {
               method: 'GET',
               credentials: 'include',
@@ -46,13 +43,13 @@ class Chatroom extends react.Component{
               },
             }
           );
-    
+      
           if (response.ok) {
             const data = await response.json();
             //const { roomName } = await response.json();
             //this.setState({name: roomName});
             this.setState({ messages: data });
-            console.log('Fetched messages:', data);
+            console.log('Fetched messages:', data); // Move this line inside the if block
           } else {
             console.error('Failed to fetch messages:', response.status);
           }
@@ -60,9 +57,11 @@ class Chatroom extends react.Component{
           console.error('Error fetching messages:', error);
         }
       };
+      
 
 
       async componentDidMount() {
+        console.log("Component mounted");
         console.log("chat room");
         this.fetchMessages();
         console.log("fetching room currently in");
@@ -78,7 +77,13 @@ class Chatroom extends react.Component{
       
             if (responseData && responseData.room) {
               const { room, user } = responseData;
-              this.setState({ room: room, userId: user._id });
+              // this.setState({ room: room, userId: user._id });
+              // this.props.userId = user._id;
+              this.setState({
+                userId: user._id,
+                room: room
+              });
+          
               console.log("Room:", room);
               console.log("User ID:", user._id);
             } else {
@@ -91,12 +96,12 @@ class Chatroom extends react.Component{
           console.error('Error fetching current room:', error);
         }
       
-        this.socket.on('newMessage', (message) => {
-          console.log('New message:', message);
-          this.setState((prevState) => ({
-            messages: [...prevState.messages, message],
-          }));
-        });
+        // this.socket.on('newMessage', (message) => {
+        //   console.log('New message:', message);
+        //   this.setState((prevState) => ({
+        //     messages: [...prevState.messages, message],
+        //   }));
+        // });
       }
       
 
@@ -156,7 +161,10 @@ class Chatroom extends react.Component{
           this.setState((prevState) => ({
             messages: [...prevState.messages, newMes],
           }));
-          this.socket.emit('newMessage', { message: text, senderId: this.props.userId });
+          console.log('Before emitting newMessage:', { message: text, senderId: this.state.userId });
+          this.socket.emit('newMessage', { message: text, senderId: this.state.userId });
+          console.log('After emitting newMessage');
+
         } else {
           console.error('Failed to send message:', response.status);
         }

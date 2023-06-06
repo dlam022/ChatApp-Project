@@ -170,7 +170,7 @@ router.post('/newmessage', async (req, res) => {
         sender: user._id, // Use the retrieved user ID
         room: roomC._id, // Use the retrieved room ID
       });
-      // await newMessage.save();
+      await newMessage.save();
       const io = req.app.get('io');
       // res.json("emitting new message")
       io.to(roomName).emit('newMessage', {
