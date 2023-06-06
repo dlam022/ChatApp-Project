@@ -48,7 +48,8 @@ class Chatroom extends react.Component{
     
           if (response.ok) {
             const data = await response.json();
-            const { roomName } = await response.json();
+            //const { roomName } = await response.json();
+            //this.setState({name: roomName});
             this.setState({ messages: data });
             console.log('Fetched messages:', data);
           } else {
@@ -137,7 +138,12 @@ class Chatroom extends react.Component{
     
         if (response.ok) {
           console.log('Message sent successfully');
-          // this.setState({ text: '' });
+          this.setState({ text: '' });
+
+          const newMes = {message: text, username: this.state.username};
+          this.setState((prevState) => ({
+            messages: [...prevState.messages, newMes],
+          }));
         } else {
           console.error('Failed to send message:', response.status);
         }
@@ -154,10 +160,19 @@ class Chatroom extends react.Component{
             <div>
                 {/* show chats */}
                 <p>PLACE HOLDER MESSAGE</p>
+
+                <div className="chatlog">
+                  {this.state.messages.map((msg, index) => (
+                    <div key={index}>
+                      <span className="username">{msg.username}: </span>
+                      {msg.message}
+                    </div>
+                  ))}
+                </div>
                 
-                {this.state.messages.map((element)=> (
+                {/* {this.state.messages.map((element)=> (
                     <p>{element.text}</p>
-                ))}
+                ))} */}
                 {/* show chat input box*/}
                 
                 <form onSubmit={this.handleSubmit}>
@@ -171,6 +186,7 @@ class Chatroom extends react.Component{
                     <button type = "submit">Send!</button>
                 </form>
                 Chatroom
+                <button className="exitbutton">Exit Room</button>
             </div>
         );
     }
