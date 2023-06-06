@@ -38,6 +38,7 @@ class Auth extends react.Component{
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(hashedData),
+          credentials: 'include',
         })
           .then((response) => response.json())
           .then((result) => {
@@ -64,7 +65,8 @@ class Auth extends react.Component{
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify(hashedData),
+            body: JSON.stringify(hashedData), // body: JSON.stringify(hashedData),
+            credentials: 'include',
         })
             .then((response) => response.json())
             .then((result) => {

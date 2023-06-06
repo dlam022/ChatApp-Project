@@ -12,6 +12,7 @@ const server = http.createServer(app);
 
 const auth = require('./routes/auth');
 const rooms = require('./routes/rooms');
+const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
 
 
 
@@ -117,7 +118,28 @@ io.on('connection', (socket)=>{
   console.log("user connected")
   // TODO: write codes for the messaging functionality
   // TODO: your code here
+  const username = socket.request.session.username;
+  const name = socket.request.session.name;
+  room = socket.request.session.room;
+  console.log("user Connected");
+  socket.on("disconnect", () => {
+    console.log("user Disconnected");
+  })
 
+  socket.on("chat message", (data)=> {
+    console.log("got the message", data)
+    io.to(room).emit("chat message", data)
+  })
+  socket.on("join", (data) => {
+    console.log("JOINED ROOM")
+    socket.join(data.room);
+    let room = data.room;
+    let username = data.username;
+    let name = data.name
+    console.log(`user has joined the room ${data.room}`);
+  })
+
+  socket.emit("starting data", {"text":"hi"})
   //write the different types of callbacks
     //user sends a message, add message to user, change rooms
       //in old code but needs to add that the first time user goes to the room, 
