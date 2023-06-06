@@ -23,8 +23,11 @@ const Messages = require('./model/messages.js');
 const io = socketIO(server, {
   cors: {
     origin:'*',
-  }
+  },
+  debug: true,
 });
+
+
 
 app.use(cors({origin: 'http://localhost:3000', credentials:true }))
 
@@ -147,7 +150,6 @@ io.use((socket, next)=> {
 //       //in old code but needs to add that the first time user goes to the room, 
 //       //load previous messages of the room using the data base
 // })
-
 io.on('connection', (socket) => {
   console.log("user connected");
 
@@ -174,23 +176,32 @@ io.on('connection', (socket) => {
     const room = socket.request.session.room;
     io.to(room).emit("message", data);
   });
-  socket.on('newMessage', async (data) => {
-    try {
-      const { text, senderId, room } = data;
 
+  socket.on('newMessage', (data) => {
+    try {
+      console.log(data)
+      const { text, senderId } = data;
+      const room = socket.request.session.room
+      console.log('Room Name:', roomName);
+      console.log('Sender ID:', senderId);
       // Save the new message to the database
       const newMessage = new Messages({
         message: { text },
         sender: senderId,
         room: room,
       });
-      await newMessage.save();
+      console.log("saving to db")
+      // await newMessage.save();
 
       // Emit the new message to all connected clients in the room
-      io.to(room).emit('message', {
+      io.to(room).emit('newMessage', {
         message: text,
         senderId,
       });
+      console.log('New message:', text);
+      console.log('Sender ID:', senderId);
+      console.log('Room:', room);
+      console.log('Message emitted to other clients in the same room.');
     } catch (error) {
       console.error('Error creating or saving message:', error);
     }
@@ -199,3 +210,4 @@ io.on('connection', (socket) => {
   socket.emit("starting data", { "text": "hi" });
 });
 app.set('io', io);
+
