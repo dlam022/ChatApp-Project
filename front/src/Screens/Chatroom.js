@@ -26,6 +26,7 @@ class Chatroom extends react.Component{
     }
       
     componentWillUnmount() {
+      console.log("LEAVING ROOM COMPONENT WILL UNMOUNT IN CHATROOM");
         if (this.socket) {
           this.socket.disconnect();
         }
@@ -173,7 +174,10 @@ class Chatroom extends react.Component{
       }
     };
     
-
+    leaveRoom = ()=> {
+      console.log("LEAVE ROOM TRIGGERED");
+      this.props.changeScreen("lobby");
+    }
     
 
     render(){
@@ -207,7 +211,7 @@ class Chatroom extends react.Component{
                     <button type = "submit">Send!</button>
                 </form>
                 Chatroom
-                <button className="exitbutton">Exit Room</button>
+                <button className="exitbutton" onClick={this.leaveRoom}>Exit Room</button>
             </div>
         );
     }
