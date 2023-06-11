@@ -1,5 +1,6 @@
 import react from "react";
 import {io} from "socket.io-client";
+import Message from "./Message";
 
 class Chatroom extends react.Component{
     constructor(props){
@@ -16,6 +17,7 @@ class Chatroom extends react.Component{
             newMessages: '',
             username: props.username, 
             room: props.room ,
+            screenName:undefined,
             // userId: undefined,
         }
         this.socket.on('newMessage', (message) => {
@@ -87,6 +89,8 @@ class Chatroom extends react.Component{
           
               console.log("Room:", room);
               console.log("User ID:", user._id);
+              console.log("USER ASSOCIATED WITH ID", user.name);
+              this.setState({screenName:user.name});
             } else {
               console.error('Room name not found in the response:', responseData);
             }
@@ -173,6 +177,10 @@ class Chatroom extends react.Component{
         console.error('Error creating message:', error);
       }
     };
+
+    handleEdit = () =>{
+      console.log("EDITING MESSAGE");
+    }
     
     leaveRoom = ()=> {
       console.log("LEAVE ROOM TRIGGERED");
@@ -189,8 +197,15 @@ class Chatroom extends react.Component{
                 <div className="chatlog">
                   {this.state.messages.map((msg, index) => (
                     <div key={index}>
-                      <span className="username">{msg.username}: </span>
-                      {msg.message}
+                      {/* <span className="username">{msg.username}: </span>
+                      {msg.message} */}
+                      <Message 
+                        key={index}
+                        loggedInUser = {this.state.screenName}
+                        messageObject = {msg}
+                        handleEditMessage = {this.handleEdit}
+                      />
+
                     </div>
                   ))}
                 </div>
