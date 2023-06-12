@@ -1,18 +1,21 @@
 import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
+import { SHA256 } from "crypto-js";
+// import { generateTOTP } from "../utils/totp.js";
 
+// STUPID LEGACY CODE, HAVE TO KEEP OR ELSE REMOVE EVERYTHING FROM THE DATABASE OTP WASNT IMPLEMENTED YET EITHER :(
 String.prototype.hashCode = function() {
     var hash = 0,
-      i, chr;
+        i, chr;
     if (this.length === 0) return hash;
     for (i = 0; i < this.length; i++) {
-      chr = this.charCodeAt(i);
-      hash = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; 
     }
     return hash.toString();
-  }
+}
 
 
 class Auth extends react.Component{
@@ -21,6 +24,7 @@ class Auth extends react.Component{
         this.state = {
             showForm: false,
             selectedForm: undefined,
+            totpCode: null,
         }
     }
 
@@ -30,8 +34,12 @@ class Auth extends react.Component{
 
     login = (data) => {
         console.log(data);
-        const { username, password } = data;
-        const hashedData = {username: username, password: password.hashCode()}
+        const { username, password, totpCode } = data;
+      
+        const hashedPassword = SHA256(password).toString();
+        // const totpCode = generateTOTP(username, hashedPassword);
+        const hashedData = { username: username, password: hashedPassword, totpCode: totpCode };
+      
         fetch('http://localhost:3001/api/auth/login', {
           method: 'POST',
           headers: {
@@ -43,23 +51,45 @@ class Auth extends react.Component{
           .then((response) => response.json())
           .then((result) => {
             console.log(result);
-            // do login stuff thnx
-            console.log("logged in");
-            if(result.status) {
-                console.log("works");
-                this.props.changeScreen("lobby");
+            if (result.status) {
+              console.log("Newer password match");
+              this.props.changeScreen("lobby"); 
+            } else {
+              //password doesn't match the newer hashing method
+              return fetch('http://localhost:3001/api/auth/login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                credentials: 'include',
+              });
+            }
+          })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            if (result.status) {
+              //password matches the legacy hashing method
+              console.log("Legacy password match");
+              this.props.changeScreen("lobby"); 
+            } else {
+              console.log("Invalid password");
             }
           })
           .catch((error) => {
             console.error('Error:', error);
           });
       };
-
+      
 
     register = (data) => {
         console.log(data)
         const { username, password, name } = data;
-        const hashedData = {username: username, password: password.hashCode(), name: name}
+        const hashedPassword = SHA256(password).toString();
+        // const totpCode = generateTOTP(username, hashedPassword);
+        const hashedData = { username: username, password: hashedPassword, name: name};
+      
         fetch('http://localhost:3001/api/auth/register', {
             method: 'POST',
             headers: {
@@ -70,7 +100,11 @@ class Auth extends react.Component{
         })
             .then((response) => response.json())
             .then((result) => {
-            console.log(result);
+                console.log(result);
+                
+                const totpCode = result.totpSecret;
+                console.log(totpCode)
+                this.setState({ totpCode })
             })
             .catch((error) => {
             console.error('Error:', error);
@@ -82,7 +116,7 @@ class Auth extends react.Component{
         if (this.state.showForm){
             let fields = [];
             if (this.state.selectedForm === "login"){
-                fields = ['username', 'password'];
+                fields = ['username', 'password', 'totpCode'];
                 display = 
                     <div className="login-form">
                         <Form 
@@ -113,6 +147,7 @@ class Auth extends react.Component{
                 <div className ="login-signup-buttons">
                     <Button className = "login-button" variant = "contained" onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
                     <Button variant = "contained" onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
+                    {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
                 </div>
         }
         return(

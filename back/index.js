@@ -157,6 +157,10 @@ io.on('connection', (socket) => {
   const username = socket.request.session.username;
   const name = socket.request.session.name;
 
+  socket.on("test", () => {
+    console.log(`test called`);
+  });
+
   socket.on("join", (data) => {
     const { room } = data;
 
@@ -171,13 +175,24 @@ io.on('connection', (socket) => {
     console.log("user Disconnected");
   });
 
-  socket.on("message", (data) => {
-    console.log("got the message", data);
-    const room = socket.request.session.room;
-    io.to(room).emit("message", data);
+  // socket.on("messagercv", (data) => {
+  //   console.log(`got the message ${data}`);
+  //   const room = socket.request.session.room;
+  //   // io.to(room).emit("messagercv", data);
+  //   socket.broadcast.emit('messagercv', data);
+  // });
+  socket.on('messagercv', (data, ack) => {
+    console.log('Received message from client:', data);
+
+    // Broadcast the received message to all other connected clients
+    socket.broadcast.emit('messagercv', data);
+
+    // Invoke the acknowledgment callback with the acknowledgement message
+    ack('received');
   });
 
-  socket.on('newMessage', (data) => {
+  socket.on("newMessage", (data) => {
+    console.log("WORK")
     try {
       console.log(data)
       const { text, senderId } = data;

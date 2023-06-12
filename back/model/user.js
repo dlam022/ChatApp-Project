@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema({
     rooms: {
         type: Array,
         required: true,
-    }
+    },
+    totpSecret: {
+        type: String,
+    },
 
 })
 

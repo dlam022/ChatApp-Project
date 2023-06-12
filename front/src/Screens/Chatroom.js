@@ -1,6 +1,6 @@
 import react from "react";
-import {io} from "socket.io-client";
-import Message from "./Message";
+import io from "socket.io-client";
+import Message from "./Message.js";
 
 class Chatroom extends react.Component{
     constructor(props){
@@ -20,11 +20,15 @@ class Chatroom extends react.Component{
             screenName:undefined,
             // userId: undefined,
         }
-        this.socket.on('newMessage', (message) => {
-            this.setState((prevState) => ({
-              messages: [...prevState.messages, message]
-            }));
-          });
+        // console.log('Socket connection established in chatroom.', this.socket.id);
+        this.socket.on("connect", () => {
+          console.log("Socket connected. ID: ", this.socket.id);
+        });
+        // this.socket.on('newMessage', (message) => {
+        //     this.setState((prevState) => ({
+        //       messages: [...prevState.messages, message]
+        //     }));
+        //   });
     }
       
     componentWillUnmount() {
@@ -84,6 +88,7 @@ class Chatroom extends react.Component{
               // this.props.userId = user._id;
               this.setState({
                 userId: user._id,
+                username: user.name,
                 room: room
               });
           
@@ -100,7 +105,14 @@ class Chatroom extends react.Component{
         } catch (error) {
           console.error('Error fetching current room:', error);
         }
-      
+        this.socket.on("messagercv", (data) => {
+          console.log("Received message from server:", data);
+          const { message, senderId } = data;
+          const newMessage = { message, senderId };
+          this.setState((prevState) => ({
+            messages: [...prevState.messages, newMessage],
+          }));
+        });
         // this.socket.on('newMessage', (message) => {
         //   console.log('New message:', message);
         //   this.setState((prevState) => ({
@@ -167,7 +179,11 @@ class Chatroom extends react.Component{
             messages: [...prevState.messages, newMes],
           }));
           console.log('Before emitting newMessage:', { message: text, senderId: this.state.userId });
-          this.socket.emit('newMessage', { message: text, senderId: this.state.userId });
+          // this.socket.emit("messagercv", { message: text, senderId: this.state.userId });
+          this.socket.emit("messagercv", {
+            message: text,
+            senderId: this.socket.id, // Use the socket ID as the sender ID
+          });
           console.log('After emitting newMessage');
 
         } else {
