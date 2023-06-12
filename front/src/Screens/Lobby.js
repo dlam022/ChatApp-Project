@@ -19,6 +19,7 @@ class Lobby extends react.Component{
             name: "",
             username: '',
             room: '',
+            totpCode: null,
         }
     }
     fetchRooms = () => {
@@ -75,6 +76,29 @@ class Lobby extends react.Component{
     newRoom = () => {
         
     }
+
+    resetTotp = () => {
+      fetch(this.props.server_url+'/api/auth/resetTotp',  {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          return res.json()
+        })
+        .then((data) => {
+          console.log(data)
+          const totpCode = data.totpSecret;
+          console.log(totpCode)
+          this.setState({ totpCode })
+        })
+        .catch((error) => {
+          console.log("Error resetting totp: ", error);
+        })
+
+  }
 
     inputChange = (event) => {
         this.setState({ [event.target.name]: event.target.value});
@@ -225,6 +249,8 @@ class Lobby extends react.Component{
                     "loading..."
                 )}
                 <button class="logoutButton" onClick={this.logout}>Log out</button>
+                <button class="resetTotp" onClick={this.resetTotp}>Generate New Hidden Code</button>
+                {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
                 {/* write codes to join a new room using room id*/}
 
                 {/* write codes to enable user to create a new room*/}

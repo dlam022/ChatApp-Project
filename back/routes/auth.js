@@ -42,13 +42,39 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Set up a route for the logout page
 router.get('/logout', (req, res) => {
-    // Clear the session data and redirect to the home page
     req.session.destroy();
     res.send({msg: "Logged out", status: true})
   });
 
+  router.get('/resetTotp', async (req, res) => {
+    const { session } = req;
+    if (!session.authenticated) {
+      return res.json({ msg: "Not authenticated", status: false });
+    }
+  
+    try {
+      const user = await User.findOne({ username: session.username });
+  
+      if (!user) {
+        return res.json({ msg: "User not found", status: false });
+      }
+  
+      const newTotpSecret = speakeasy.generateSecret({
+        length: 5,
+        symbols: false,
+      }).base32;
+  
+      user.totpSecret = newTotpSecret;
+      await user.save();
+  
+      res.json({ msg: "TOTP reset successfully", status: true, totpSecret: newTotpSecret });
+    } catch (error) {
+      console.error("Error resetting TOTP:", error);
+      res.json({ msg: "Failed to reset TOTP", status: false });
+    }
+  });
+  
 
 router.post('/register', async (req, res) => {
   const { username, password, name } = req.body;
