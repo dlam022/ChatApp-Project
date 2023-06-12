@@ -283,7 +283,7 @@ class Lobby extends react.Component{
 
                                   <Button
                                     variant="contained" color="error" onClick={() => this.removeRoom(room)}>
-                                    Delete Room
+                                    Delete
                                   </Button>
                                 </CardActions>
 
