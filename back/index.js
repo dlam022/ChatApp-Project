@@ -156,6 +156,7 @@ io.on('connection', (socket) => {
   // Retrieve user information from session
   const username = socket.request.session.username;
   const name = socket.request.session.name;
+  let room = undefined;
 
   socket.on("test", () => {
     console.log(`test called`);
@@ -191,36 +192,42 @@ io.on('connection', (socket) => {
     ack('received');
   });
 
-  socket.on("newMessage", (data) => {
-    console.log("WORK")
-    try {
-      console.log(data)
-      const { text, senderId } = data;
-      const room = socket.request.session.room
-      console.log('Room Name:', roomName);
-      console.log('Sender ID:', senderId);
-      // Save the new message to the database
-      const newMessage = new Messages({
-        message: { text },
-        sender: senderId,
-        room: room,
-      });
-      console.log("saving to db")
-      // await newMessage.save();
-
-      // Emit the new message to all connected clients in the room
-      io.to(room).emit('newMessage', {
-        message: text,
-        senderId,
-      });
-      console.log('New message:', text);
-      console.log('Sender ID:', senderId);
-      console.log('Room:', room);
-      console.log('Message emitted to other clients in the same room.');
-    } catch (error) {
-      console.error('Error creating or saving message:', error);
-    }
+  socket.on("chat message", (data) => {
+    console.log(data)
+    console.log("got the message", data);
+    io.to(room).emit("chat message", data);
   });
+
+  // socket.on("newMessage", (data) => {
+  //   console.log("WORK")
+  //   try {
+  //     console.log(data)
+  //     const { text, senderId } = data;
+  //     const room = socket.request.session.room
+  //     console.log('Room Name:', roomName);
+  //     console.log('Sender ID:', senderId);
+  //     // Save the new message to the database
+  //     const newMessage = new Messages({
+  //       message: { text },
+  //       sender: senderId,
+  //       room: room,
+  //     });
+  //     console.log("saving to db")
+  //     // await newMessage.save();
+
+  //     // Emit the new message to all connected clients in the room
+  //     io.to(room).emit('newMessage', {
+  //       message: text,
+  //       senderId,
+  //     });
+  //     console.log('New message:', text);
+  //     console.log('Sender ID:', senderId);
+  //     console.log('Room:', room);
+  //     console.log('Message emitted to other clients in the same room.');
+  //   } catch (error) {
+  //     console.error('Error creating or saving message:', error);
+  //   }
+  // });
 
   socket.emit("starting data", { "text": "hi" });
 });
