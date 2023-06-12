@@ -256,25 +256,33 @@ html {
 
 }
 
+/*Chatroom*/
 .entire-chat-screen {
   top:0;
   left:0;
   right:0;
   bottom:0;
-  background-color:#000000;
   color:white;
   height:100%;
   margin-bottom:-50em;
+  background-color: #060c33;
 }
 
-.chatroom-header{
-  display:flex;
-  top:0;
-  left:0;
-  width:100%;
-  justify-content:space-between;
-  background-color:rgba(128, 128, 128, 0.8);
-  position:sticky;
+.chatroom-header {
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #0D1864;
+    position: sticky;
+}
+.chatroom-header h1{
+    margin-left: 50px;
+}
+
+.chatroom-header button{
+    margin-right: 50px;
 }
 
 .exit-button {
@@ -282,25 +290,89 @@ html {
 }
 
 .new-message-form-container{
-  display:flex;
-  margin-top:2em;
-  width:100%;
 }
 
 .new-message-form {
-  display:flex;
-  flex:1;
+    margin: 20px 50px 20px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .new-message-text-box {
-  flex:1;
-  height:2em;
+    width: 100%;
+    height: 50px;
+    border-radius: 15px 0 0 15px ;
+}
+
+.new-message-form button {
+    height: 50px;
+    border-radius: 0 15px 15px 0;
+}
+
+.new-message-form div div input {
+    height: 0;
+    border-radius: 0;
+}
+
+.chatlog {
+    margin: 20px 50px 20px 50px;
+}
+
+.entire-message {
+    display: inline-block;
+    width: 100%;
+    min-height: 50px;
+    margin: 20px 0px 20px 0px;
+}
+
+.entire-message h4{
+    margin-top: 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+.entire-message p{
+    overflow: hidden;
+}
+
+.entire-message button {
+    background-color: #6b95f5;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    height: 30px;
+    width: 120px;
+    position: relative;
+    order: 3;
+}
+
+.entire-message form {
+    order: 1;
+    position: relative;
+    left: 120px;
+    top: -30px;
+    color: white;
+    text-align: right;
+    overflow: visible;
+}
+.entire-message form button{
+    position: absolute;
+    right: 120px;
+    width: 80px;
+}
+.entire-message form input{
+    margin-right: 10px;
+    position: relative;
+    right: 200px;
+    width: 60%;
+    padding: 6px;
+    border: none;
+    border-radius: 10px;
 }
 
 .send-button{
-  display:flex;
-  margin-left:8px;
-  height:2em;
 }
 
 body{

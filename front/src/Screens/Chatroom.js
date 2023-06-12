@@ -208,7 +208,7 @@ class Chatroom extends react.Component{
             <div className="entire-chat-screen">
                 {/* show chats */}
                 <div className = "chatroom-header">
-                  <h1>{this.state.room} chat room</h1>
+                  <h1>{this.state.room} Chatroom</h1>
                   <Button variant="standard" color="error" className="exit-button" onClick={this.leaveRoom}>Exit Room</Button>
                 </div>
 
