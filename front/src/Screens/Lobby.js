@@ -1,5 +1,7 @@
 import react from "react";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
+import {Card, CardContent, CardActions, Typography} from "@mui/material";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import io from 'socket.io-client';
 
 class Lobby extends react.Component{
@@ -226,52 +228,82 @@ class Lobby extends react.Component{
         });
       }
 
-
+      // const CustomColorButton = () => {
+        
+      // }
 
     render(){
         return(
+          <div className ="entire-lobby">
             <div>
-                <h1>Lobby</h1>
-                <h2>Active Rooms</h2>
+
+                <div className = "lobby-to-center">
+                    <h1 id="lobby-h1" className="to-center">Welcome to the Chat House Lobby</h1>
+
+                    <h3 className="create-room-tag to-center">Create A New Room</h3>
+                    <TextField 
+                        name="newRoom" 
+                        className="to-center"
+                        value={this.state.newRoom}
+                        onChange={this.inputChange} 
+                        placeholder="Enter Room Name"
+                        variant="outlined"
+                        sx={{backgroundColor:'#fefefe'}}
+                    />
+                    <Button className = "to-center" variant = "contained" color="primary" onClick={this.createRoom}>Create</Button>
+
+                    <Button className="logoutButton to-center" onClick={this.logout}variant="outlined" color="primary" startIcon={<ExitToAppIcon />}>Log out</Button>
+                    <Button className="resetTotp to-center" onClick={this.resetTotp}>Generate New Hidden Code</Button>
+                    {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
+                </div>
+                <h2 id="active-rooms-h2">Active Rooms!</h2>
+
+
                 {/* {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} onClick={() => alert(room)}>{room}</Button>
                 }) : "loading..."} */}
-                {this.state.rooms ? (
-                    this.state.rooms.map((room) => (
-                    <div key={"roomKey" + room}>
-                        <Button variant="contained" onClick={() => this.joinRoom(room)}>
-                        {room}
-                        </Button>
-                        <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => this.removeRoom(room)}
-                        >
-                        X
-                        </Button>
-                    </div>
-                    ))
-                ) : (
-                    "loading..."
-                )}
-                <button class="logoutButton" onClick={this.logout}>Log out</button>
-                <button class="resetTotp" onClick={this.resetTotp}>Generate New Hidden Code</button>
-                {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
-                {/* write codes to join a new room using room id*/}
+
+                <div className="room-grid-container">
+                  {this.state.rooms ? (
+                      this.state.rooms.map((room) => (
+                       
+                       <Card variant="outlined" sx={{backgroundColor:'#000000'}}>
+                          <CardContent>
+                            <div key={"roomKey" + room} className="chatroom-box">
+                                <Typography sx={{fontSize:20}} color="#ffffff" gutterBottom>
+                                  Room Name
+                                </Typography>
+                                <Typography sx={{fontSize:18}} color="#ffffff" gutterBottom>
+                                  {room}
+                                </Typography>
+                               <CardActions>
+                                  <Button variant="contained" color="success" onClick={()=>this.joinRoom(room)}>
+                                    Join!
+                                  </Button>
+
+                                  <Button
+                                    variant="contained" color="error" onClick={() => this.removeRoom(room)}>
+                                    Delete Room
+                                  </Button>
+                                </CardActions>
+
+                            </div>
+                          </CardContent>
+                        </Card>
+                        
+                      ))
+                  ) : (
+                      "loading..."
+                  )}
+                </div>
+                
 
                 {/* write codes to enable user to create a new room*/}
-                <h3>Create A New Room</h3>
-                <input 
-                    type="text" 
-                    name="newRoom" 
-                    value={this.state.newRoom}
-                    onChange={this.inputChange} 
-                    placeholder="Enter Room Name"
-                />
-                <button onClick={this.createRoom}>Create</button>
+                
 
                 
             </div>
+          </div>
         );
     }
 }
