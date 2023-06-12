@@ -133,10 +133,6 @@
 .welcome{
   color:white;
 }
-.totp{
-  color:white;
-}
-
 
 .login-button{
   margin-right:3em;
@@ -169,20 +165,20 @@
   font-weight:900;
 }
 
-.room-grid-container{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  grid-gap:8em;
+/* Lobby */
+
+html {
+    background-color: #060c33;
 }
 
 .entire-lobby{
   background-color:#060c33;
   margin-top:-1.31em;
-/* Lobby */
 }
 
 #lobby-h1{
-  color:rgb(255, 243, 243);;
+  text-align: center;
+  color:rgb(255, 243, 243);
   font-weight: 900;
 }
 
@@ -202,16 +198,62 @@
   justify-content:center;
 }
 
+.lobby-to-center h1{
+    margin-top: 50px;
+}
+
 .to-center {
   align-self:center;
 }
 
-.logoutButton{
-  margin-top:20px;
+.lobby-to-center .MuiFormControl-root {
+    background: none;
+    width: 300px;
+    padding: 0px;
 }
 
-.totp{
-  color:white;
+.MuiFormControl-root div {
+    margin: 5px;
+    border-radius: 15px/45px;
+    border: none;
+    background-color: white;
+    color: #060c33;
+}
+
+.lobby-to-center button{
+    width: 120px;
+    white-space: nowrap;
+}
+
+.totp {
+    color: white;
+}
+
+#active-rooms-h2{
+    text-align: center;
+}
+
+.room-grid-container {
+    margin: 0 50px 0 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 1em;
+}
+
+.room-grid-container div{
+    border-radius: 10px;
+}
+
+.room-grid-container div p{
+    text-align: center;
+    font-weight: 900;
+}
+
+.room-grid-container .MuiCardActions-root{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .entire-chat-screen {
@@ -232,7 +274,7 @@
   width:100%;
   justify-content:space-between;
   background-color:rgba(128, 128, 128, 0.8);
-  position:sticky;
+  position:fixed;
 }
 
 .exit-button {
