@@ -136,6 +136,13 @@
 .totp{
   color:white;
 }
+.success{
+  color:greenyellow;
+}
+.failure{
+  color:red;
+}
+
 
 
 .login-button{
