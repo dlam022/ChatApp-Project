@@ -79,3 +79,13 @@
   background-color:#FEAF78;
   font-weight:900;
 }
+
+.room-grid-container{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  grid-gap:8em;
+}
+
+.entire-lobby{
+  background-color:#060c33;
+}

@@ -1,5 +1,6 @@
 import react from "react";
 import { Button } from "@mui/material";
+import {Card, CardContent, CardActions, Typography} from "@mui/material";
 import io from 'socket.io-client';
 
 class Lobby extends react.Component{
@@ -196,36 +197,56 @@ class Lobby extends react.Component{
         });
       }
 
-
+      const CustomColorButton = () => {
+        
+      }
 
     render(){
         return(
+          <div className ="entire-lobby">
             <div>
                 <h1>Lobby</h1>
                 <h2>Active Rooms</h2>
                 {/* {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} onClick={() => alert(room)}>{room}</Button>
                 }) : "loading..."} */}
-                {this.state.rooms ? (
-                    this.state.rooms.map((room) => (
-                    <div key={"roomKey" + room}>
-                        <Button variant="contained" onClick={() => this.joinRoom(room)}>
-                        {room}
-                        </Button>
-                        <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => this.removeRoom(room)}
-                        >
-                        X
-                        </Button>
-                    </div>
-                    ))
-                ) : (
-                    "loading..."
-                )}
+
+                <div className="room-grid-container">
+                  {this.state.rooms ? (
+                      this.state.rooms.map((room) => (
+                        <Card variant="outlined" sx={{backgroundColor:'#000000'}}>
+                          <CardContent>
+                            <div key={"roomKey" + room} className="chatroom-box">
+                                <Typography sx={{fontSize:20}} color="white" gutterBottom>
+                                  Room Name
+                                </Typography>
+                                <Typography sx={{fontSize:18}} color="white" gutterBottom>
+                                  {room}
+                                </Typography>
+                               <CardActions>
+                                  <Button variant="contained" style={buttonStyle} onClick={()=>this.joinRoom(room)}>
+                                    Join!
+                                  </Button>
+
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => this.removeRoom(room)}
+                                  >
+                                    Delete Room
+                                  </Button>
+                                </CardActions>
+
+                            </div>
+                          </CardContent>
+                        </Card>
+                        
+                      ))
+                  ) : (
+                      "loading..."
+                  )}
+                </div>
                 <button class="logoutButton" onClick={this.logout}>Log out</button>
-                {/* write codes to join a new room using room id*/}
 
                 {/* write codes to enable user to create a new room*/}
                 <h3>Create A New Room</h3>
@@ -240,6 +261,7 @@ class Lobby extends react.Component{
 
                 
             </div>
+          </div>
         );
     }
 }
