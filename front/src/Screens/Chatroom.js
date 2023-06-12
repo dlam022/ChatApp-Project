@@ -1,5 +1,7 @@
 import react from "react";
 import io from "socket.io-client";
+import { Button, TextField } from "@mui/material";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Message from "./Message.js";
 
 class Chatroom extends react.Component{
@@ -202,9 +204,12 @@ class Chatroom extends react.Component{
 
     render(){
         return(
-            <div>
+            <div className="entire-chat-screen">
                 {/* show chats */}
-                <p>PLACE HOLDER MESSAGE</p>
+                <div className = "chatroom-header">
+                  <h1>{this.state.room} chat room</h1>
+                  <Button variant="outlined" color="primary" className="exit-button" onClick={this.leaveRoom}>Exit Room</Button>
+                </div>
 
                 <div className="chatlog">
                   {this.state.messages.map((msg, index) => (
@@ -238,8 +243,6 @@ class Chatroom extends react.Component{
                     />
                     <button type = "submit">Send!</button>
                 </form>
-                Chatroom
-                <button className="exitbutton" onClick={this.leaveRoom}>Exit Room</button>
             </div>
         );
     }

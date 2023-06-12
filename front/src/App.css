@@ -210,6 +210,29 @@
   color:white;
 }
 
+.entire-chat-screen {
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-color:#000000;
+  color:white;
+}
+
+.chatroom-header{
+  display:flex;
+  top:0;
+  left:0;
+  width:100%;
+  justify-content:space-between;
+  background-color:rgba(128, 128, 128, 0.8);
+  position:fixed;
+}
+
+.exit-button {
+  margin-left:auto;
+}
+
 body{
   background-color:#FEAF78;
 }
