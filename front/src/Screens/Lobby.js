@@ -197,16 +197,16 @@ class Lobby extends react.Component{
         });
       }
 
-      const CustomColorButton = () => {
+      // const CustomColorButton = () => {
         
-      }
+      // }
 
     render(){
         return(
           <div className ="entire-lobby">
             <div>
-                <h1>Lobby</h1>
-                <h2>Active Rooms</h2>
+                <h1 id="lobby-h1">Lobby</h1>
+                <h2 id="active-rooms-h2">Active Rooms</h2>
                 {/* {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} onClick={() => alert(room)}>{room}</Button>
                 }) : "loading..."} */}
@@ -217,22 +217,19 @@ class Lobby extends react.Component{
                         <Card variant="outlined" sx={{backgroundColor:'#000000'}}>
                           <CardContent>
                             <div key={"roomKey" + room} className="chatroom-box">
-                                <Typography sx={{fontSize:20}} color="white" gutterBottom>
+                                <Typography sx={{fontSize:20}} color="#ffffff" gutterBottom>
                                   Room Name
                                 </Typography>
-                                <Typography sx={{fontSize:18}} color="white" gutterBottom>
+                                <Typography sx={{fontSize:18}} color="#ffffff" gutterBottom>
                                   {room}
                                 </Typography>
                                <CardActions>
-                                  <Button variant="contained" style={buttonStyle} onClick={()=>this.joinRoom(room)}>
+                                  <Button variant="contained" color="success" onClick={()=>this.joinRoom(room)}>
                                     Join!
                                   </Button>
 
                                   <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => this.removeRoom(room)}
-                                  >
+                                    variant="contained" color="error" onClick={() => this.removeRoom(room)}>
                                     Delete Room
                                   </Button>
                                 </CardActions>

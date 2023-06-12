@@ -88,7 +88,7 @@ class Auth extends react.Component{
                         <Form 
                             fields={fields} 
                             close={this.closeForm} 
-                            type="login" 
+                            type="Login" 
                             submit={this.login} 
                             key={this.state.selectedForm}
                         />

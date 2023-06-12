@@ -37,12 +37,97 @@
   }
 }
 
-.signup-form{
-  background-color: rgb(255, 255, 255);
+/* Welcome Screen */
+.signup-form {
+    text-align: center;
+    width: 250px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #FEAF78;
+    border: none;
+    border-radius: 10px;
+}
+.signup-form form div {
+    width: 100%;
+    margin: 2px 0;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.signup-form button{
+    color: white;
+}
+.signup-form button:hover{
+    background: none;
+    border: none;
+}
+.signup-form form div div div{
+    background-color: white;
+    border-radius: 10px;
+}
+.signup-form fieldset{    
+    border: 2px solid #1d1d1d;
+}
+.signup-form input{
+    width: 88%;
+}
+.signup-form input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: none;
+    background-color: #1d1d1d;
+    color: white;
+}
+.signup-form input[type="submit"]:hover{
+    cursor: pointer;
+    background-color: #333333;
 }
 
-.login-form{
-  background-color:rgb(255, 255, 255);
+.login-form {
+    text-align: center;
+    width: 250px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #FEAF78;
+    border: none;
+    border-radius: 10px;
+}
+.login-form form div {
+    width: 100%;
+    margin: 2px 0;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.login-form button{
+    color: white;
+}
+.login-form button:hover{
+    background: none;
+    border: none;
+}
+.login-form form div div div{
+    background-color: white;
+    border-radius: 10px;
+}
+.login-form fieldset{    
+    border: 2px solid #1d1d1d;
+}
+.login-form input{
+    width: 88%;
+}
+.login-form input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: none;
+    background-color: #1d1d1d;
+    color: white;
+}
+.login-form input[type="submit"]:hover{
+    cursor: pointer;
+    background-color: #333333;
 }
 
 .welcome{
@@ -88,4 +173,9 @@
 
 .entire-lobby{
   background-color:#060c33;
+/* Lobby */
+}
+
+body{
+  background-color:#FEAF78;
 }
