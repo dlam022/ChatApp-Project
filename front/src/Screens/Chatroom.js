@@ -233,9 +233,10 @@ class Chatroom extends react.Component{
                 ))} */}
                 {/* show chat input box*/}
                 
-                <form onSubmit={this.handleSubmit}>
+                <form className ="new-message-form" onSubmit={this.handleSubmit}>
                     <input
                         type = "text"
+                        className="new-message-text-box"
                         value = {this.state.text}
                         // value = {this.newMessages}
                         onChange = {this.handleChange}

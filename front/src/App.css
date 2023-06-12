@@ -226,11 +226,15 @@
   width:100%;
   justify-content:space-between;
   background-color:rgba(128, 128, 128, 0.8);
-  position:fixed;
+  position:sticky;
 }
 
 .exit-button {
   margin-left:auto;
+}
+
+.new-message-form {
+  margin-top:5em;
 }
 
 body{
