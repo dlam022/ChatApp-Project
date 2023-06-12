@@ -12,6 +12,8 @@ function Message({loggedInUser, messageObject, server_url}) {
     var canEdit = false;
     console.log("CURR USER", loggedInUser);
     console.log("MESSAGE OWNER", messageObject.username);
+    console.log(server_url)
+    // messageObject.messageId = "6486acd79f93420db6b69da1"
 
     if(loggedInUser === messageObject.username) {
         canEdit = true;
@@ -21,6 +23,7 @@ function Message({loggedInUser, messageObject, server_url}) {
     }
 
     console.log("MESSAGE OBJECT", messageObject);
+    
 
     const handleEdit = async () =>{
         console.log("")
@@ -71,14 +74,12 @@ function Message({loggedInUser, messageObject, server_url}) {
                         {isShowEditBox && (
 
                             <form onSubmit={handleEdit}>
-                                <input 
-                                    type ="text"
-                                    value = {editBoxText}
-                                    onChange ={(e)=>setEditBoxText(e.target.value)}
-                                />
-
-                                <button type="submit" onClick={()=>{setEditBox(false)}}>Edit</button>
-
+                            <input 
+                                type="text"
+                                value={editBoxText}
+                                onChange={(e) => setEditBoxText(e.target.value)}
+                            />
+                            <button type="submit">Edit</button>
                             </form>
                         )}
                     </>

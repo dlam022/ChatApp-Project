@@ -100,7 +100,7 @@ router.get('/allmessages/:roomName', async (req, res) => {
     const roomNameSenderNameArr = allMessages.map((message) => {
       const roomName = message.room.name;
       const senderName = message.sender.name;
-      const messageId = message.sender._id;
+      const messageId = message._id;
 
       console.log('Message:', message.message.text);
       console.log('Room:', roomName);
@@ -295,31 +295,24 @@ router.delete('/leave', async (req, res) => {
 });
 
 router.post('/editmessage', async (req, res) => {
-
   try {
-    const {messageId, newMessageText} = req.body;
-  }
+    const { messageId, newMessageText } = req.body;
 
-  catch(error){
-    console.error("ERROR FETCHING MESSAGE ID AND NEW MESSAGE TEXT", error);
-  }
+    const updatedMessage = await Messages.findByIdAndUpdate(
+      messageId,
+      { 'message.text': newMessageText },
+      { new: true }
+    );
 
-  try{
-    Messages.findByIdAndUpdate(messageId, {'message.text':newMessageText}, {new:true},{err,updatedMessage}, (err)=> {
-      
-      if(updatedMessage) {
-        console.log("in editmessage POST, the updated message is", updatedMessage);
-      }
-    });
-  }
-
-  catch {
-    if(err) {
-      console.error("In editmessage POST, error saving updated message to database", err);
-    }
-    else {
+    if (updatedMessage) {
+      console.log("In editmessage POST, the updated message is", updatedMessage);
+      res.status(200).json(updatedMessage);
+    } else {
       console.log("In editmessage POST ISSUE. MESSAGE WAS NOT FOUND. ID:", messageId);
+      res.status(404).json({ error: "Message not found" });
     }
+  } catch (error) {
+    console.error("In editmessage POST, error updating message", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-
 });
