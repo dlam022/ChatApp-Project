@@ -1,6 +1,6 @@
 import react from "react";
 import {io} from "socket.io-client";
-import Message from "./Message";
+import Message from "./Message.js";
 
 class Chatroom extends react.Component{
     constructor(props){
