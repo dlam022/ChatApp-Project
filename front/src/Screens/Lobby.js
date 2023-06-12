@@ -1,6 +1,7 @@
 import react from "react";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import {Card, CardContent, CardActions, Typography} from "@mui/material";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import io from 'socket.io-client';
 
 class Lobby extends react.Component{
@@ -205,8 +206,27 @@ class Lobby extends react.Component{
         return(
           <div className ="entire-lobby">
             <div>
-                <h1 id="lobby-h1">Lobby</h1>
-                <h2 id="active-rooms-h2">Active Rooms</h2>
+
+                <div className = "lobby-to-center">
+                    <h1 id="lobby-h1" className="to-center">Welcome to the Chat House Lobby</h1>
+
+                    <h3 className="create-room-tag to-center">Create A New Room</h3>
+                    <TextField 
+                        name="newRoom" 
+                        className="to-center"
+                        value={this.state.newRoom}
+                        onChange={this.inputChange} 
+                        placeholder="Enter Room Name"
+                        variant="outlined"
+                        sx={{backgroundColor:'#fefefe'}}
+                    />
+                    <Button className = "to-center" variant = "contained" color="primary" onClick={this.createRoom}>Create</Button>
+
+                    <Button className="logoutButton to-center" onClick={this.logout}variant="outlined" color="primary" startIcon={<ExitToAppIcon />}>Log out</Button>
+                </div>
+                <h2 id="active-rooms-h2">Active Rooms!</h2>
+
+
                 {/* {this.state.rooms ? this.state.rooms.map((room) => {
                     return <Button variant="contained" key={"roomKey"+room} onClick={() => alert(room)}>{room}</Button>
                 }) : "loading..."} */}
@@ -214,7 +234,8 @@ class Lobby extends react.Component{
                 <div className="room-grid-container">
                   {this.state.rooms ? (
                       this.state.rooms.map((room) => (
-                        <Card variant="outlined" sx={{backgroundColor:'#000000'}}>
+                       
+                       <Card variant="outlined" sx={{backgroundColor:'#000000'}}>
                           <CardContent>
                             <div key={"roomKey" + room} className="chatroom-box">
                                 <Typography sx={{fontSize:20}} color="#ffffff" gutterBottom>
@@ -243,18 +264,10 @@ class Lobby extends react.Component{
                       "loading..."
                   )}
                 </div>
-                <button class="logoutButton" onClick={this.logout}>Log out</button>
+                
 
                 {/* write codes to enable user to create a new room*/}
-                <h3>Create A New Room</h3>
-                <input 
-                    type="text" 
-                    name="newRoom" 
-                    value={this.state.newRoom}
-                    onChange={this.inputChange} 
-                    placeholder="Enter Room Name"
-                />
-                <button onClick={this.createRoom}>Create</button>
+                
 
                 
             </div>

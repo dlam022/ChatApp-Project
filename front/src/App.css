@@ -173,7 +173,37 @@
 
 .entire-lobby{
   background-color:#060c33;
+  margin-top:-1.31em;
 /* Lobby */
+}
+
+#lobby-h1{
+  color:rgb(255, 243, 243);;
+  font-weight: 900;
+}
+
+#active-rooms-h2 {
+  color:rgb(255, 243, 243);
+  font-weight:900
+}
+
+.create-room-tag {
+  color:rgb(255, 243, 243);
+  font-weight:900;
+}
+
+.lobby-to-center{
+  display:flex;
+  flex-direction: column;
+  justify-content:center;
+}
+
+.to-center {
+  align-self:center;
+}
+
+.logoutButton{
+  margin-top:20px;
 }
 
 body{
