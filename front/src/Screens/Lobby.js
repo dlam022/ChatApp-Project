@@ -253,7 +253,7 @@ class Lobby extends react.Component{
                     <Button className = "to-center" variant = "contained" color="primary" onClick={this.createRoom}>Create</Button>
 
                     <Button className="logoutButton to-center" onClick={this.logout}variant="outlined" color="primary" startIcon={<ExitToAppIcon />}>Log out</Button>
-                    <button class="resetTotp" onClick={this.resetTotp}>Generate New Hidden Code</button>
+                    <Button className="resetTotp to-center" onClick={this.resetTotp}>Generate New Hidden Code</Button>
                     {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
                 </div>
                 <h2 id="active-rooms-h2">Active Rooms!</h2>
