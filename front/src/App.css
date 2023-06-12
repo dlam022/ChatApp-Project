@@ -221,6 +221,8 @@
   bottom:0;
   background-color:#000000;
   color:white;
+  height:100%;
+  margin-bottom:-50em;
 }
 
 .chatroom-header{
@@ -237,8 +239,26 @@
   margin-left:auto;
 }
 
+.new-message-form-container{
+  display:flex;
+  margin-top:2em;
+  width:100%;
+}
+
 .new-message-form {
-  margin-top:5em;
+  display:flex;
+  flex:1;
+}
+
+.new-message-text-box {
+  flex:1;
+  height:2em;
+}
+
+.send-button{
+  display:flex;
+  margin-left:8px;
+  height:2em;
 }
 
 body{

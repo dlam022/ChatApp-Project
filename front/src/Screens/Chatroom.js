@@ -2,6 +2,7 @@ import react from "react";
 import io from "socket.io-client";
 import { Button, TextField } from "@mui/material";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import SendIcon from '@mui/icons-material/Send';
 import Message from "./Message.js";
 
 class Chatroom extends react.Component{
@@ -208,7 +209,7 @@ class Chatroom extends react.Component{
                 {/* show chats */}
                 <div className = "chatroom-header">
                   <h1>{this.state.room} chat room</h1>
-                  <Button variant="outlined" color="primary" className="exit-button" onClick={this.leaveRoom}>Exit Room</Button>
+                  <Button variant="standard" color="error" className="exit-button" onClick={this.leaveRoom}>Exit Room</Button>
                 </div>
 
                 <div className="chatlog">
@@ -232,18 +233,21 @@ class Chatroom extends react.Component{
                     <p>{element.text}</p>
                 ))} */}
                 {/* show chat input box*/}
-                
-                <form className ="new-message-form" onSubmit={this.handleSubmit}>
-                    <input
-                        type = "text"
-                        className="new-message-text-box"
-                        value = {this.state.text}
-                        // value = {this.newMessages}
-                        onChange = {this.handleChange}
-                        placeholder = "Send a message..."
-                    />
-                    <button type = "submit">Send!</button>
-                </form>
+                <div className="new-message-form-container">
+                  <form className ="new-message-form" onSubmit={this.handleSubmit}>
+                      <TextField
+                          type = "text"
+                          variant="filled"
+                          className="new-message-text-box"
+                          sx={{backgroundColor:'#fefefe'}}
+                          value = {this.state.text}
+                          // value = {this.newMessages}
+                          onChange = {this.handleChange}
+                          placeholder = "Send a message..."
+                      />
+                      <Button className ="send-button" variant="contained" color="primary" type = "submit" startIcon={<SendIcon/>}>Send</Button>
+                  </form>
+                </div>
             </div>
         );
     }
