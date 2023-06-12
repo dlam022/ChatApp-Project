@@ -51,6 +51,11 @@ class Lobby extends react.Component{
         // TODO: write codes to fetch all rooms from server
         this.fetchRooms();
     }
+    componentWillUnmount() {
+      // Close the socket connection
+      console.log("UNMOUNTING")
+      this.socket.close();
+    }
 
     logout = () => {
         fetch(this.props.server_url+'/api/auth/logout',  {
@@ -203,7 +208,8 @@ class Lobby extends react.Component{
             console.log(room)
             console.log(username)
             console.log("Emitting join event with room:", room, "and username:", username);
-            this.socket.emit("join", { room: room, username: username });            
+            this.socket.emit("join", { room: room, username: username });    
+            this.socket.emit("test");          
             this.setState({
                 username: username,
                 room: room,
