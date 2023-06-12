@@ -147,7 +147,7 @@ class Auth extends react.Component{
                 <div className ="login-signup-buttons">
                     <Button className = "login-button" variant = "contained" onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
                     <Button variant = "contained" onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
-                    {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
+                    
                 </div>
         }
         return(
@@ -158,6 +158,7 @@ class Auth extends react.Component{
                     <h1 className="welcome"> Welcome to our Chat House! </h1>
                     <div >
                         {display}
+                        {this.state.totpCode ? (<h2 className = "totp">TOTP Code: {this.state.totpCode}</h2>) : null}
                     </div>
                 </div>
                 <div className="right-login-signup-display">
