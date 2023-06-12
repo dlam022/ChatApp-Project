@@ -83,32 +83,53 @@ class Auth extends react.Component{
             let fields = [];
             if (this.state.selectedForm === "login"){
                 fields = ['username', 'password'];
-                display = <Form fields={fields} 
-                close={this.closeForm} 
-                type="login" 
-                submit={this.login} 
-                key={this.state.selectedForm}/>;
+                display = 
+                    <div className="login-form">
+                        <Form 
+                            fields={fields} 
+                            close={this.closeForm} 
+                            type="login" 
+                            submit={this.login} 
+                            key={this.state.selectedForm}
+                        />
+                    </div>
             }
             else if (this.state.selectedForm === "register"){
                 fields = [ 'username', 'password', 'name'];
-                display = <Form
-                    fields={fields} 
-                    close={this.closeForm} 
-                    type="register" 
-                    submit={this.register} 
-                    key={this.state.selectedForm}/>;
+                display = 
+                    <div className = "signup-form">
+                        <Form
+                            fields={fields} 
+                            close={this.closeForm} 
+                            type="register" 
+                            submit={this.register} 
+                            key={this.state.selectedForm}
+                        />
+                    </div>
             }   
         }
         else{
-            display = <div>
-                <Button onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
-                <Button onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
-                </div>              ;
+            display = 
+                <div className ="login-signup-buttons">
+                    <Button className = "login-button" variant = "contained" onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
+                    <Button variant = "contained" onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
+                </div>
         }
         return(
-            <div>
-                <h1> Welcome to our website! </h1>
-                {display}
+
+
+            <div className="entire-login-signup-display">
+                <div className="left-login-signup-display">
+                    <h1 className="welcome"> Welcome to our Chat House! </h1>
+                    <div >
+                        {display}
+                    </div>
+                </div>
+                <div className="right-login-signup-display">
+                    <h1>Login or Signup!</h1>
+                    <p>If you haven't been here before or you want a new account, signup today!</p>
+                    <p>If you've been here before and want to continue chatting, login!</p>
+                </div>
             </div>
         );
     }

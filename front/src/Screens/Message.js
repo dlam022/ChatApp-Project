@@ -25,7 +25,8 @@ function Message({loggedInUser, messageObject, server_url}) {
     console.log("MESSAGE OBJECT", messageObject);
     
 
-    const handleEdit = async () =>{
+    const handleEdit = async (event) =>{
+        event.preventDefault();
         console.log("")
         console.log("")
         console.log("ENTER HANDLE EDIT");
@@ -44,6 +45,9 @@ function Message({loggedInUser, messageObject, server_url}) {
                 },
                 body: JSON.stringify(editMessageData), //need to include the messageID
             });
+
+            setEditBox(false);
+
 
             if(response.ok){
                 console.log("IN MESSAGE JS,Edit message object sent to backend");

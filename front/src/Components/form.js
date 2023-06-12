@@ -43,7 +43,7 @@ class Form extends react.Component{
                         return(
                             <div>
                                 <TextField 
-                                    variant="standard" 
+                                    variant="outlined" 
                                     key={"auth"+field[1]} 
                                     label={field[1]} 
                                     onChange={(event) => this.handleChange(event, index)}
