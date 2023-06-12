@@ -177,10 +177,6 @@ class Chatroom extends react.Component{
         console.error('Error creating message:', error);
       }
     };
-
-    handleEdit = () =>{
-      console.log("EDITING MESSAGE");
-    }
     
     leaveRoom = ()=> {
       console.log("LEAVE ROOM TRIGGERED");
@@ -203,7 +199,8 @@ class Chatroom extends react.Component{
                         key={index}
                         loggedInUser = {this.state.screenName}
                         messageObject = {msg}
-                        handleEditMessage = {this.handleEdit}
+                        server_url = {this.props.server_url}
+                        // handleEditMessage = {this.handleEdit}
                       />
 
                     </div>

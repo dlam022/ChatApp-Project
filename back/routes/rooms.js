@@ -100,15 +100,18 @@ router.get('/allmessages/:roomName', async (req, res) => {
     const roomNameSenderNameArr = allMessages.map((message) => {
       const roomName = message.room.name;
       const senderName = message.sender.name;
+      const messageId = message.sender._id;
 
       console.log('Message:', message.message.text);
       console.log('Room:', roomName);
       console.log('Sender Name:', senderName);
+      console.log('MESSAGE ID', messageId);
 
       return {
         message: message.message.text,
         roomName,
         username: senderName,
+        messageId:messageId,
       };
     });
 
@@ -289,4 +292,34 @@ router.delete('/leave', async (req, res) => {
         console.error("Couldn't remove room", error);
         res.status(500).send("Internal server error");
     }
+});
+
+router.post('/editmessage', async (req, res) => {
+
+  try {
+    const {messageId, newMessageText} = req.body;
+  }
+
+  catch(error){
+    console.error("ERROR FETCHING MESSAGE ID AND NEW MESSAGE TEXT", error);
+  }
+
+  try{
+    Messages.findByIdAndUpdate(messageId, {'message.text':newMessageText}, {new:true},{err,updatedMessage}, (err)=> {
+      
+      if(updatedMessage) {
+        console.log("in editmessage POST, the updated message is", updatedMessage);
+      }
+    });
+  }
+
+  catch {
+    if(err) {
+      console.error("In editmessage POST, error saving updated message to database", err);
+    }
+    else {
+      console.log("In editmessage POST ISSUE. MESSAGE WAS NOT FOUND. ID:", messageId);
+    }
+  }
+
 });
