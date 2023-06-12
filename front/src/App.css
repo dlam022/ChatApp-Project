@@ -206,6 +206,10 @@
   margin-top:20px;
 }
 
+.totp{
+  color:white;
+}
+
 body{
   background-color:#FEAF78;
 }
