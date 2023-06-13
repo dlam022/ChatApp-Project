@@ -2,7 +2,7 @@
 
 # NOTE: THIS WEBSITE MUST BE RAN IN FIREFOX
 
-### https://main--magical-biscochitos-a98078.netlify.app/
+### [Our website!](https://main--magical-biscochitos-a98078.netlify.app/)
 
 # Chat Application Website!
 For our CS110 Final Project, our group decided to implement a chat application (lab 6) with 3 extra features. The extra features we chose to implement were 2 Factor Authentication, a good design, and an edit message functionality.
