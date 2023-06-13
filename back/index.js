@@ -29,7 +29,7 @@ const io = socketIO(server, {
 
 
 
-app.use(cors({origin: 'https://localhost:3000/', credentials:true }))
+app.use(cors({origin: 'https://main--magical-biscochitos-a98078.netlify.app/', credentials:true }))
 
 
 dotenv.config();
