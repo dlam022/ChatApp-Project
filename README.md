@@ -2,7 +2,7 @@
 # Chat Application Website!
 For our CS110 Final Project, our group decided to implement a chat application (lab 6) with 3 extra features. The extra features we chose to implement were 2 Factor Authentication, a good design, and an edit message functionality.
 
-## Frontend Discussion
+## Discussion
 Because we chose to implment a good design as one of our three features, our group spent a considerable amount of time planning, coding, and laying out an aesthetic application appearence as well as an easy to use UX.
 
 ### Registration Login Screen
