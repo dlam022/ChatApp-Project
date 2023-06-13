@@ -25,6 +25,9 @@ class Auth extends react.Component{
             showForm: false,
             selectedForm: undefined,
             totpCode: null,
+            successfulReg: null,
+            failReg: null,
+            name: null,
         }
     }
 
@@ -105,6 +108,15 @@ class Auth extends react.Component{
                 const totpCode = result.totpSecret;
                 console.log(totpCode)
                 this.setState({ totpCode })
+                const successfulReg = name
+                var failReg = null
+                this.setState({failReg})
+                this.setState({successfulReg})
+                if (result.status === false){
+                    var failReg = username
+                    this.setState({failReg})
+                    this.setState({successfulReg: null})
+                }
             })
             .catch((error) => {
             console.error('Error:', error);
@@ -145,9 +157,9 @@ class Auth extends react.Component{
         else{
             display = 
                 <div className ="login-signup-buttons">
-                    <Button className = "login-button" variant = "contained" onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
+                    <Button className = "login-button" variant = "contained" onClick={() => this.setState({showForm: true, selectedForm:"login", successfulReg:null})}> Login </Button>
                     <Button variant = "contained" onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
-                    {this.state.totpCode ? ( <p>TOTP Code: {this.state.totpCode}</p>) : null}
+                    
                 </div>
         }
         return(
@@ -158,6 +170,9 @@ class Auth extends react.Component{
                     <h1 className="welcome"> Welcome to our Chat House! </h1>
                     <div >
                         {display}
+                        {this.state.failReg ? (<h2 className = "failure">Failed to register! Username {this.state.failReg} is taken!</h2>) : null}
+                        {this.state.successfulReg ? (<h2 className = "success"> Successfully registered, {this.state.successfulReg}!</h2>) : null}
+                        {this.state.totpCode ? (<h2 className = "totp">TOTP Code: {this.state.totpCode}</h2>) : null}
                     </div>
                 </div>
                 <div className="right-login-signup-display">
