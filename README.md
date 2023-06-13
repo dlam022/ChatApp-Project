@@ -1,4 +1,9 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/w5ovOekq)
+
+# NOTE: THIS WEBSITE MUST BE RAN IN FIREFOX
+
+### https://main--magical-biscochitos-a98078.netlify.app/
+
 # Chat Application Website!
 For our CS110 Final Project, our group decided to implement a chat application (lab 6) with 3 extra features. The extra features we chose to implement were 2 Factor Authentication, a good design, and an edit message functionality.
 
