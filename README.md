@@ -26,7 +26,10 @@ Inspired by aquatic darkmode themes, we choose to go for a color pallette with d
 <br>  
 The main purpose of the lobby is to be able to join any chatroom, create a chatroom with any name, generate a new two factor authentication code, and logging out. 
 
-
+### Chatroom Screen
+| Chat |
+| -------- |
+|![image](https://github.com/UCR-CS110-S23/project-test-rerecipe/assets/110149934/7152c921-ae3e-4724-906a-126249788b88) <br>  |
 
 
 
