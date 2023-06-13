@@ -6,7 +6,13 @@ const app = express();
 const speakeasy = require('speakeasy');
 
 module.exports = router;
+// <<<<<<< HEAD
 app.use(cors({origin: '*', credentials:true}))
+
+// app.use(cors({origin: 'https://main--magical-biscochitos-a98078.netlify.app/', credentials:true}))
+// router.use(cors({ origin: 'https://main--magical-biscochitos-a98078.netlify.app/', credentials: true }));
+
+// >>>>>>> b5287c3ad6eedd6922c945d3e975d4c52526841d
 
 
 
