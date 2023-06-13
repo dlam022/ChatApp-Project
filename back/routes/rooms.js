@@ -138,19 +138,85 @@ router.get('/allmessages/:roomName', async (req, res) => {
 //     }
 //   });
 
-router.post('/newmessage', async (req, res) => {
+// router.post('/newmessage', async (req, res) => {
+//     try {
+//       const { text } = req.body;
+
+      
+//     //   res.send({ text })
+//       const roomName = req.session.room; // Retrieve the room name from the session data
+//       // console.log(roomName)
+//       if (!req.session.room) {
+//         return res.status(400).send("Room name not found in the session");
+//       }
+//       const username = req.session.username; 
+//       // console.log(username)
+//     //   res.json(roomName)
+//     //   console.log(req.session.room)
+    
+//       const roomC = await Room.findOne({ name: roomName });
+//         // res.json({"testing ": roomC})
+//         // console.log(roomC)
+  
+//       if (!roomC) {
+//         return res.status(404).send("Room not found");
+//       }
+  
+//       const user = await User.findOne({ username });
+  
+//       if (!user) {
+//         return res.status(404).send("User not found");
+//       }
+  
+//       const newMessage = new Messages({
+//         message: { text },
+//         sender: user._id, // Use the retrieved user ID
+//         room: roomC._id, // Use the retrieved room ID
+//       });
+//       await newMessage.save();
+//       const io = req.app.get('io');
+//       // res.json("emitting new message")
+//       io.to(roomName).emit('newMessage', {
+//         message: text,
+//         senderId: user._id,
+//       });
+  
+  
+//       return res.status(201).send('Message saved successfully');
+//     } 
+//     catch (error) {
+//       console.error("Error creating or saving message:", error);
+//       res.status(500).send("Error in the newmessage endpoint");
+//     }
+//   });
+  router.post('/newmessage', async (req, res) => {
+    // const { message } = req.body 
+    // const newMessage = new Messages ({
+    //   sender: sender.userID,
+    //   room: room,
+    //   message: message,
+    // })
+    // try{
+    //   const dataSaved = await newMessage.save();
+    //   res.status(200).json({dataSaved, status: 200});
+    // }
+    // catch(error) {
+    //   console.log(error);
+    //   res.send("Error");
+    // }
     try {
       const { text } = req.body;
+      //console.log("called or not");
 
       
     //   res.send({ text })
       const roomName = req.session.room; // Retrieve the room name from the session data
-      // console.log(roomName)
+      //console.log(roomName)
       if (!req.session.room) {
         return res.status(400).send("Room name not found in the session");
       }
       const username = req.session.username; 
-      // console.log(username)
+      //console.log(username)
     //   res.json(roomName)
     //   console.log(req.session.room)
     
@@ -173,23 +239,23 @@ router.post('/newmessage', async (req, res) => {
         sender: user._id, // Use the retrieved user ID
         room: roomC._id, // Use the retrieved room ID
       });
+
+      //console.log(newMessage);
       await newMessage.save();
-      const io = req.app.get('io');
+      // const io = req.app.get('io');
       // res.json("emitting new message")
-      io.to(roomName).emit('newMessage', {
-        message: text,
-        senderId: user._id,
-      });
+      // io.to(roomName).emit('newMessage', {
+      //   message: text,
+      //   senderId: user._id,
+      // });
   
-  
-      return res.status(201).send('Message saved successfully');
+      // return res.status(201).send('Message saved successfully');
     } 
     catch (error) {
       console.error("Error creating or saving message:", error);
       res.status(500).send("Error in the newmessage endpoint");
     }
   });
-  
 
 
 router.post('/create', async (req, res) => {

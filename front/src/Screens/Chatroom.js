@@ -1,3 +1,4 @@
+
 import react from "react";
 import io from "socket.io-client";
 import { Button, TextField } from "@mui/material";
@@ -5,46 +6,49 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SendIcon from '@mui/icons-material/Send';
 import Message from "./Message.js";
 
+
 class Chatroom extends react.Component{
     constructor(props){
         super(props);
         this.socket = io('http://localhost:3001', {
             cors: {
-                origin: ['http://localhost:3001', 'http://localhost:3000'],
+                origin: 'http://localhost:3000',
                 credentials: true
-            },  transports: ['websocket']
+            },  transports: ['websocket'],
         });
         this.state = {
             messages: [],
             text: '',
-            newMessages: '',
+            //newMessages: '',
             username: props.username, 
             room: props.room ,
+            name: props.name,
             screenName:undefined,
             // userId: undefined,
         }
-        // console.log('Socket connection established in chatroom.', this.socket.id);
-        this.socket.on("connect", () => {
-          console.log("Socket connected. ID: ", this.socket.id);
-        });
-        // this.socket.on('newMessage', (message) => {
-        //     this.setState((prevState) => ({
-        //       messages: [...prevState.messages, message]
-        //     }));
-        //   });
+        this.socket.on("chat message", (data) => {
+            console.log("received message")
+            this.setState((prevState) => ({
+              messages: [...prevState.messages, data],
+            }));
+          });
+          // this.socket.on("test", () => {
+          //   console.log(`test called`);
+          // });
     }
       
     componentWillUnmount() {
       console.log("LEAVING ROOM COMPONENT WILL UNMOUNT IN CHATROOM");
-        if (this.socket) {
-          this.socket.disconnect();
-        }
+        // if (this.socket) {
+        //   this.socket.disconnect();
+          // console.log("left");
+        //}
+        // this.socket.off();
       }
       
       fetchMessages = async () => {
         try {
-          const response = await fetch(
-            this.props.server_url + '/api/rooms/allmessages/' + this.state.roomName,
+          const response = await fetch(this.props.server_url + '/api/rooms/allmessages/' + this.state.roomName,
             {
               method: 'GET',
               credentials: 'include',
@@ -71,6 +75,85 @@ class Chatroom extends react.Component{
 
 
       async componentDidMount() {
+        //this.socket.on("editReceive", this.handleMessageUpdated);
+        //const { roomId } = this.props
+        //this.socket.emit("join", { room: roomId});
+
+        // this.socket.on("something", (message) => {
+        //   if(message.room === roomId) {
+        //     this.setState((prevState) => ({
+        //       messages: [...prevState.messages, message.text]
+        //     }));
+        //   };
+        // })
+        this.socket.on("receive", (data) => {
+          console.log("received message")
+          this.fetchMessages()
+          this.forceUpdate();
+          // this.setState((prevState) => ({
+          //   messages: [...prevState.messages, data],
+          // }));
+          
+        });
+        this.socket.on("editReceive", (data) => {
+          console.log("edit received message");
+          console.log("Received data:", data);
+          //this.fetchMessages();
+          //this.forceUpdate();
+        
+          const updatedMessages = this.state.messages.map((message) => {
+            if (message.messageId === data.messageId) {
+              return {
+                ...message,
+                message: data.message,
+                username: data.username,
+              };
+            }
+            return message;
+          });
+          console.log(updatedMessages);
+          this.forceUpdate();
+          //this.sendChat(datahere);
+          this.setState({
+            messages: updatedMessages,
+          });
+          // this.setState(() => ({
+          //   messages: updatedMessages
+          // }));
+          
+          //console.log(messages);
+          // this.fetchMessages();
+          //this.forceUpdate();
+          console.log("UPDATED:",updatedMessages)
+          console.log("UUUUP:",this.state.messages)
+          this.setState({messages: updatedMessages})
+        });
+
+        // this.socket.on("editReceive", (data) => {
+        //   console.log("edit received message");
+        //   console.log("Received data:", data);
+        //   console.log("PREV STATE",this.prevState);
+        //   let updatedMessages;
+
+        //   this.setState((prevState) => {
+        //       updatedMessages = prevState.messages.map((message)=>
+        //       message.messageId === data.messageId ? data : message
+        //     );
+        //     return updatedMessages;
+        //   });
+
+        //   console.log("UPDATED", updatedMessages);
+        //   console.log("STATE ANEW", this.state.messages);
+        // });
+ 
+        
+        
+        
+        
+        
+        this.socket.on("test", () => {
+          console.log(`test called`);
+        });
         console.log("Component mounted");
         console.log("chat room");
         this.fetchMessages();
@@ -91,7 +174,8 @@ class Chatroom extends react.Component{
               // this.props.userId = user._id;
               this.setState({
                 userId: user._id,
-                username: user.name,
+                username: user.username,
+                name: user.name,
                 room: room
               });
           
@@ -108,20 +192,7 @@ class Chatroom extends react.Component{
         } catch (error) {
           console.error('Error fetching current room:', error);
         }
-        this.socket.on("messagercv", (data) => {
-          console.log("Received message from server:", data);
-          const { message, senderId } = data;
-          const newMessage = { message, senderId };
-          this.setState((prevState) => ({
-            messages: [...prevState.messages, newMessage],
-          }));
-        });
-        // this.socket.on('newMessage', (message) => {
-        //   console.log('New message:', message);
-        //   this.setState((prevState) => ({
-        //     messages: [...prevState.messages, message],
-        //   }));
-        // });
+      
       }
       
 
@@ -130,78 +201,97 @@ class Chatroom extends react.Component{
         this.setState({text:event.target.value});
     };
 
-    // handleChange = () => {
-    //     const { newMessages } = this.state;
-    //     if(newMessages) {
-    //         this.socket.emit('handleChange', newMessages);
-    //         this.setState({
-    //             newMessages: ''
-    //         });
-    //     }
-    // };
-    // handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     console.log("I dont wanna live");
-    //     //fetch post to newmessage
-    //     //call componentDidMount to refresh page and get new message(s)
-          
-    //     this.socket.emit('sendMessage', { text: this.state.text });
-    //     console.log("sent "+ this.state.text)
-
-    //     this.setState({ text: '' });
-
-
-    // };
 
     handleSubmit = async (event) => {
       event.preventDefault();
     
-      try {
-        const { text } = this.state;
-    
-        const messageData = {
-          text,
-          room: this.state.room,
-        };
+    };
 
-        const response = await fetch(this.props.server_url + '/api/rooms/newmessage', {
+    sendMessage =  () => {
+      const { text, room, username, name} = this.state;
+      
+      const data = {
+          text,
+          room,
+          username,
+          name,
+          senderId: this.state.userId,
+        };
+      console.log(data);
+      // this.socket.emit("chat message", data);
+      this.sendChat(data);
+      const newMes = {message: text, username: username};
+      this.setState((prevState) => ({
+        messages: [...prevState.messages, newMes],
+      }));
+      //this.setState({text: ""});
+      fetch(this.props.server_url + '/api/rooms/newmessage', {
           method: 'POST',
+          mode: "cors",
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': "application/json"
           },
-          body: JSON.stringify(messageData),
-        });
+          body: JSON.stringify(data),
+        })
+        .then((res) => {
+          res.json().then((data) => {
+            if(data === 200) {
+              console.log("nice")
+            }
+            else{
+              console.log("failed to send to the db");
+            }
+          })
+        })
+
+
+      
+        
+  
     
-        if (response.ok) {
-          console.log('Message sent successfully');
-          this.setState({ text: '' });
+      //const { text } = this.state;
+      // const { roomID } = this.props;
+      // // const { usernameId } = this.props;
+      // const msg = this.state.text;
+      // console.log(msg);
+      // this.socket.emit('something', {room: roomID, text: msg});
+      // this.setState({text});
+    }
 
-          const newMes = {message: text, username: this.state.username};
-          this.setState((prevState) => ({
-            messages: [...prevState.messages, newMes],
-          }));
-          console.log('Before emitting newMessage:', { message: text, senderId: this.state.userId });
-          // this.socket.emit("messagercv", { message: text, senderId: this.state.userId });
-          this.socket.emit("messagercv", {
-            message: text,
-            senderId: this.socket.id, // Use the socket ID as the sender ID
-          });
-          console.log('After emitting newMessage');
+    //  handleMessageUpdated = (updatedMessage) => {
+    //   console.log("edit received message");
+    //   console.log("Received data:", updatedMessage);
+    //  // console.log("PREV STATE",this.prevState.messages);
 
-        } else {
-          console.error('Failed to send message:', response.status);
-        }
-      } catch (error) {
-        console.error('Error creating message:', error);
-      }
-    };
+    //   this.setState((prevState) => ({
+    //     messages:prevState.messages.map((message) =>
+    //       message.messageId === updatedMessage.messageId ? updatedMessage:message
+    //   ),
+    //   }));
+    //   // console.log("UPDATED:",updatedMessages)
+    //   this.forceUpdate();
+    //   console.log("UUUUP:",this.state.messages);
+
+    // };
     
     leaveRoom = ()=> {
       console.log("LEAVE ROOM TRIGGERED");
+      this.socket.disconnect();
       this.props.changeScreen("lobby");
     }
     
+    //define the send chat function
+    sendChat = (text) => {
+      this.socket.emit("chat message", text);
+      this.forceUpdate();
+    }
+
+    handleEditReceived = (data) => {
+      this.socket.emit("chat edit", data); 
+     
+    }
 
     render(){
         return(
@@ -222,6 +312,8 @@ class Chatroom extends react.Component{
                         loggedInUser = {this.state.screenName}
                         messageObject = {msg}
                         server_url = {this.props.server_url}
+                        handleEmit = {this.sendChat}
+                        handleEditReceivedEmit = {this.handleEditReceived}
                         // handleEditMessage = {this.handleEdit}
                       />
 
@@ -233,6 +325,18 @@ class Chatroom extends react.Component{
                     <p>{element.text}</p>
                 ))} */}
                 {/* show chat input box*/}
+                
+//                 <form onSubmit={this.handleSubmit}>
+//                     <input
+//                         type = "text"
+//                         value = {this.state.text}
+//                         onChange = {this.handleChange}
+//                         placeholder = "Send a message..."
+//                     />
+//                     <button onClick={this.sendMessage} type = "submit">Send!</button>
+//                 </form>
+//                 Chatroom
+//               <button className="exitbutton" onClick={this.leaveRoom}>Exit Room</button>
                 <div className="new-message-form-container">
                   <form className ="new-message-form" onSubmit={this.handleSubmit}>
                       <TextField
@@ -245,12 +349,11 @@ class Chatroom extends react.Component{
                           onChange = {this.handleChange}
                           placeholder = "Send a message..."
                       />
-                      <Button className ="send-button" variant="contained" color="primary" type = "submit" startIcon={<SendIcon/>}>Send</Button>
+                      <Button className ="send-button" onClick={this.sendMessage} variant="contained" color="primary" type = "submit" startIcon={<SendIcon/>}>Send</Button>
                   </form>
                 </div>
             </div>
         );
     }
 }
-
 export default Chatroom;
