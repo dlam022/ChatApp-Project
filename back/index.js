@@ -22,14 +22,14 @@ const Messages = require('./model/messages.js');
 
 const io = socketIO(server, {
   cors: {
-    origin:'*',
+    origin:'https://main--magical-biscochitos-a98078.netlify.app',
   },
   debug: true,
 });
 
 
 
-app.use(cors({origin: '*', credentials:true }))
+app.use(cors({origin: 'https://main--magical-biscochitos-a98078.netlify.app', credentials:true }))
 
 
 dotenv.config();
