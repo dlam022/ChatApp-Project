@@ -9,7 +9,7 @@ class Lobby extends react.Component{
         super(props);
         this.socket = io('https://chatappp.herokuapp.com/', {
             cors: {
-                origin: 'https://main--magical-biscochitos-a98078.netlify.app/',
+                origin: '*',
                 credentials: true
             },  transports: ['websocket']
         });
@@ -69,7 +69,7 @@ class Lobby extends react.Component{
           })
           .then((res) => {
             if (res.ok) {
-                window.location.href= "https://main--magical-biscochitos-a98078.netlify.app/";
+                window.location.href= "*";
             } else {
                 console.log("couldnt log out");
             }
