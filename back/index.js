@@ -22,7 +22,7 @@ const Messages = require('./model/messages.js');
 
 const io = socketIO(server, {
   cors: {
-    origin:'https://main--magical-biscochitos-a98078.netlify.app',
+    origin:'*',
   },
   debug: true,
 });
