@@ -69,7 +69,7 @@ class Lobby extends react.Component{
           })
           .then((res) => {
             if (res.ok) {
-                window.location.href= "*";
+                window.location.href= "/";
             } else {
                 console.log("couldnt log out");
             }
