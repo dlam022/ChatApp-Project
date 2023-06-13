@@ -326,17 +326,6 @@ class Chatroom extends react.Component{
                 ))} */}
                 {/* show chat input box*/}
                 
-//                 <form onSubmit={this.handleSubmit}>
-//                     <input
-//                         type = "text"
-//                         value = {this.state.text}
-//                         onChange = {this.handleChange}
-//                         placeholder = "Send a message..."
-//                     />
-//                     <button onClick={this.sendMessage} type = "submit">Send!</button>
-//                 </form>
-//                 Chatroom
-//               <button className="exitbutton" onClick={this.leaveRoom}>Exit Room</button>
                 <div className="new-message-form-container">
                   <form className ="new-message-form" onSubmit={this.handleSubmit}>
                       <TextField
