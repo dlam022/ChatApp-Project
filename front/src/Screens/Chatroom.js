@@ -12,7 +12,7 @@ class Chatroom extends react.Component{
         super(props);
         this.socket = io('https://chatappp.herokuapp.com/', {
             cors: {
-                origin: 'http://localhost:3000',
+                origin: 'https://chatappp.herokuapp.com/',
                 credentials: true
             },  transports: ['websocket'],
         });

@@ -9,7 +9,7 @@ class Lobby extends react.Component{
         super(props);
         this.socket = io('https://chatappp.herokuapp.com/', {
             cors: {
-                origin: 'https://localhost:3000',
+                origin: 'https://chatappp.herokuapp.com/',
                 credentials: true
             },  transports: ['websocket']
         });
