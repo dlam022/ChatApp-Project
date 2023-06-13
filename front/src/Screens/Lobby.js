@@ -7,9 +7,9 @@ import io from 'socket.io-client';
 class Lobby extends react.Component{
     constructor(props){
         super(props);
-        this.socket = io('http://localhost:3001', {
+        this.socket = io('https://chatappp.herokuapp.com/', {
             cors: {
-                origin: 'http://localhost:3000',
+                origin: 'https://localhost:3000',
                 credentials: true
             },  transports: ['websocket']
         });
