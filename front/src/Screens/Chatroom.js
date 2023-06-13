@@ -10,7 +10,7 @@ import Message from "./Message.js";
 class Chatroom extends react.Component{
     constructor(props){
         super(props);
-        this.socket = io('http://localhost:3001', {
+        this.socket = io('https://chatappp.herokuapp.com/', {
             cors: {
                 origin: 'http://localhost:3000',
                 credentials: true

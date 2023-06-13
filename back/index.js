@@ -29,7 +29,7 @@ const io = socketIO(server, {
 
 
 
-app.use(cors({origin: 'http://localhost:3000', credentials:true }))
+app.use(cors({origin: 'https://localhost:3000/', credentials:true }))
 
 
 dotenv.config();
@@ -92,9 +92,10 @@ app.use("/api/rooms/", rooms);
 
 
 // Start the server
-server.listen(process.env.PORT, () => {
+server.listen(process.env.PORT || 3001, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
+
 
 
 // TODO: make sure that the user is logged in before connecting to the socket

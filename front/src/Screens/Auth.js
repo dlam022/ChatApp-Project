@@ -43,7 +43,7 @@ class Auth extends react.Component{
         // const totpCode = generateTOTP(username, hashedPassword);
         const hashedData = { username: username, password: hashedPassword, totpCode: totpCode };
       
-        fetch('http://localhost:3001/api/auth/login', {
+        fetch('https://chatappp.herokuapp.com/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ class Auth extends react.Component{
               this.props.changeScreen("lobby"); 
             } else {
               //password doesn't match the newer hashing method
-              return fetch('http://localhost:3001/api/auth/login', {
+              return fetch('https://chatappp.herokuapp.com/api/auth/login', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ class Auth extends react.Component{
         // const totpCode = generateTOTP(username, hashedPassword);
         const hashedData = { username: username, password: hashedPassword, name: name};
       
-        fetch('http://localhost:3001/api/auth/register', {
+        fetch('https://chatappp.herokuapp.com/api/auth/register', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
