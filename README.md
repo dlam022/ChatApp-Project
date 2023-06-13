@@ -2,7 +2,7 @@
 # Chat Application Website!
 For our CS110 Final Project, our group decided to implement a chat application (lab 6) with 3 extra features. The extra features we chose to implement were 2 Factor Authentication, a good design, and an edit message functionality.
 
-## Frontend Discussion
+## Discussion
 Because we chose to implment a good design as one of our three features, our group spent a considerable amount of time planning, coding, and laying out an aesthetic application appearence as well as an easy to use UX.
 
 ### Registration Login Screen
@@ -27,9 +27,13 @@ Inspired by aquatic darkmode themes, we choose to go for a color pallette with d
 The main purpose of the lobby is to be able to join any chatroom, create a chatroom with any name, generate a new two factor authentication code, and logging out. 
 
 ### Chatroom Screen
-| Chat |
-| -------- |
-|![image](https://github.com/UCR-CS110-S23/project-test-rerecipe/assets/110149934/7152c921-ae3e-4724-906a-126249788b88) <br>  |
+
+Chat            |  Edit Chat
+:-------------------------:|:-------------------------:
+![image](https://github.com/UCR-CS110-S23/project-test-rerecipe/assets/110149934/7152c921-ae3e-4724-906a-126249788b88)|![image](https://github.com/UCR-CS110-S23/project-test-rerecipe/assets/110149934/7e41f0c1-9447-4b1d-a586-03fc971f12ab) <br>  
+
+
+The chatroom features edit message and send messages. When another user in the room sends a message, your screen updates to show their message too! A user can only edit messages that they themselves had orignally written. This means a user cannot edit everysingle message in the chat unless they wrote every message in the chat. 
 
 
 
