@@ -2,7 +2,7 @@ import react from "react";
 import {io} from "socket.io-client";
 import{useState} from 'react';
 
-function Message({loggedInUser, messageObject, server_url}) {
+function Message({loggedInUser, messageObject, server_url, handleEmit, handleEditReceivedEmit}) {
     
     
     const [editBoxText, setEditBoxText] = useState('');
@@ -35,6 +35,12 @@ function Message({loggedInUser, messageObject, server_url}) {
             messageId:messageObject.messageId,
             newMessageText:editBoxText
         }
+        const editDataSocket = {
+            message:editBoxText,
+            messageId:messageObject.messageId,
+            roomName:messageObject.roomName,
+            username: messageObject.username,
+        }
 
         try{
             const response = await fetch(server_url + '/api/rooms/editmessage', {
@@ -45,7 +51,8 @@ function Message({loggedInUser, messageObject, server_url}) {
                 },
                 body: JSON.stringify(editMessageData), //need to include the messageID
             });
-
+            // handleEmit(editMessageData.newMessageText);
+            handleEditReceivedEmit(editDataSocket);
             setEditBox(false);
 
 

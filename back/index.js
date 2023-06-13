@@ -156,11 +156,11 @@ io.on('connection', (socket) => {
   // Retrieve user information from session
   const username = socket.request.session.username;
   const name = socket.request.session.name;
-  let room = undefined;
+  //let room = undefined;
 
-  socket.on("test", () => {
-    console.log(`test called`);
-  });
+  // socket.on("test", () => {
+  //   console.log(`test called`);
+  // });
 
   socket.on("join", (data) => {
     const { room } = data;
@@ -195,8 +195,36 @@ io.on('connection', (socket) => {
   socket.on("chat message", (data) => {
     console.log(data)
     console.log("got the message", data);
+    const room = socket.request.session.room;
+    io.to(room).emit("test", data); 
+    io.emit("test", data); 
+    io.emit("receive", data); 
+    io.to(room).emit("receive", data);
     io.to(room).emit("chat message", data);
+
+    console.log(room);
   });
+
+  socket.on("chat edit", (data) => {
+    console.log(data)
+    console.log("got the message", data);
+    const room = socket.request.session.room;
+    io.to(room).emit("test", data); 
+    io.emit("test", data); 
+    io.emit("editReceive", data); 
+    io.to(room).emit("receive", data);
+    io.to(room).emit("chat message", data);
+
+    console.log(room);
+  });
+
+  // socket.on("editReceive", (data) => {
+  //   console.log(data);
+  //   io.emit("editReceive", data);
+  //   const room = socket.request.session.room;
+  //   io.to(room).emit("editReceive", data);
+  //   //console.log("goes here");
+  // })
 
   // socket.on("newMessage", (data) => {
   //   console.log("WORK")
@@ -230,6 +258,7 @@ io.on('connection', (socket) => {
   // });
 
   socket.emit("starting data", { "text": "hi" });
+  
 });
 app.set('io', io);
 
