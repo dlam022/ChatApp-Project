@@ -3,7 +3,7 @@ import Auth from './Screens/Auth.js';
 import Lobby from "./Screens/Lobby.js";
 import Chatroom from "./Screens/Chatroom.js";
 
-const server_url = "https://chatappp.herokuapp.com";
+const server_url = "https://chatappp-f2eda2968854.herokuapp.com/";
 
 
 class ScreenHandler extends react.Component{
