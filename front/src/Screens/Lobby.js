@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 class Lobby extends react.Component{
     constructor(props){
         super(props);
-        this.socket = io('https://chatappp.herokuapp.com', {
+        this.socket = io('https://chatappp-f2eda2968854.herokuapp.com/', {
             cors: {
                 origin: 'https://main--magical-biscochitos-a98078.netlify.app',
                 credentials: true
